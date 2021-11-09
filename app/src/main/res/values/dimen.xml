@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="match_parent" format="integer" type="dimen">-1</item>
+    <item name="wrap_content" format="integer" type="dimen">-2</item>
+
+    <dimen name="page_title_height">54dp</dimen>
+    <dimen name="page_title_size">24sp</dimen>
+
+    <dimen name="scroll_padding_top">7dp</dimen>
+    <dimen name="scroll_padding_bottom">60dp</dimen>
+
+    <dimen name="subtab_text_size">10sp</dimen>
+    <dimen name="subtab_padding_bottom">60dp</dimen>
+
+    <dimen name="splash_screen_logo_dimen">150dp</dimen>
+    <dimen name="splash_screen_logo_radius">50dp</dimen>
+    <dimen name="splash_screen_logo_png_size">230dp</dimen>
+
+    <dimen name="sort_icon_dimen">40dp</dimen>
+
+    <dimen name="tab_text_size">12sp</dimen>
+
+    <dimen name="popup_title_size">20sp</dimen>
+
+    <dimen name="popup_button_dimen">40dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_margin_b">7dp</dimen>
+    <dimen name="card_radius">20dp</dimen>
+    <dimen name="card_border_radius">21dp</dimen>
+
+    <!-- Big Card -->
+    <dimen name="big_name_height">120dp</dimen>
+    <dimen name="big_name_size">50dp</dimen>
+    <dimen name="big_icon_height">100dp</dimen>
+    <dimen name="big_icon_padding_tb">25dp</dimen>
+    <dimen name="big_place_size">30dp</dimen>
+    <dimen name="big_score_size">20dp</dimen>
+
+    <!-- Mid (Quest & Group) $ Small Card -->
+    <dimen name="mid_small_padding_lr">20dp</dimen>
+    <dimen name="mid_small_score_size">15dp</dimen>
+    <dimen name="mid_small_name_size">30dp</dimen>
+
+    <!-- Mid (Quest & Group) Card -->
+    <dimen name="mid_side_padding_tb">10dp</dimen>
+    <dimen name="mid_description_height_con">0dp</dimen>
+    <dimen name="mid_description_height_exp">100dp</dimen>
+
+    <!-- Quest Card -->
+    <dimen name="quest_title_height">120dp</dimen>
+    <dimen name="quest_icon_title_size">10sp</dimen>
+    <dimen name="quest_time_size">15dp</dimen>
+    <dimen name="quest_description_size">15dp</dimen>
+
+    <!-- Quest Card Contracted -->
+    <dimen name="quest_icon_title_height_con">0dp</dimen>
+    <dimen name="quest_name_padding_tb_con">0dp</dimen> <!-- should be half of icon title height -->
+    <dimen name="quest_buttons_height_con">0dp</dimen>
+
+    <!-- Quest Card Expanded -->
+
+    <dimen name="quest_icon_title_height_exp">30dp</dimen>
+    <dimen name="quest_name_padding_tb_exp">15dp</dimen> <!-- should be half of icon title height -->
+    <dimen name="quest_buttons_height_exp">50dp</dimen>
+
+    <!-- Group Card -->
+    <dimen name="group_card_height">120dp</dimen>
+    <dimen name="group_title_height">30dp</dimen>
+    <dimen name="group_title_size">18dp</dimen>
+    <dimen name="group_place_size">25dp</dimen>
+
+    <!-- Small Card -->
+    <dimen name="small_height">90dp</dimen>
+    <dimen name="small_place_size">25dp</dimen>
+
+    <dimen name="empty_space_height">40dp</dimen>
+    <dimen name="input_bottom_padding">5dp</dimen>
+
+
+</resources>
