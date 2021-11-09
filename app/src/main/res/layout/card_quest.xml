@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/QuestCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_background"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/mid_small_padding_lr"
+    android:paddingRight="@dimen/mid_small_padding_lr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".15"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/mid_side_padding_tb"
+            android:paddingBottom="@dimen/mid_side_padding_tb">
+
+            <TextView
+                android:id="@+id/time_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/quest_icon_title_height_con"
+                android:gravity="center"
+                android:text="Time remaining"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/quest_icon_title_size"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:src="@drawable/ic_outline_timer_24"
+                app:tint="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/Time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".6"
+                android:gravity="center"
+                android:text="19h 19m"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/quest_time_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/TitleContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".7"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TitleTop"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/quest_name_padding_tb_con" />
+
+            <TextView
+                android:id="@+id/Title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/quest_title_height"
+                android:gravity="center"
+                android:text="find the fish"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/mid_small_name_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TitleBottom"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/quest_name_padding_tb_con" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".15"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/mid_side_padding_tb"
+            android:paddingBottom="@dimen/mid_side_padding_tb">
+
+            <TextView
+                android:id="@+id/score_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/quest_icon_title_height_con"
+                android:gravity="center"
+                android:text="Reward"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/quest_icon_title_size"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/score_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:src="@drawable/ic_outline_arrow_circle_up_24"
+                app:tint="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/Score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".6"
+                android:gravity="center"
+                android:text="1000 XP"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/mid_small_score_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/Description"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mid_description_height_con"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/quest_description_size" />
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/quest_buttons_height_con"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/view_in_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/mid_small_padding_lr"
+            android:layout_weight="1"
+            android:backgroundTint="@color/card_color"
+            android:text="view in map"
+            android:textColor="@color/text_color" />
+
+        <Button
+            android:id="@+id/start_quest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/card_color"
+            android:text="start quest"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+
+</LinearLayout>

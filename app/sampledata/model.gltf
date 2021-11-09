@@ -1,0 +1,366 @@
+{
+   "accessors" : [
+      {
+         "bufferView" : 0,
+         "byteOffset" : 0,
+         "componentType" : 5125,
+         "count" : 327168,
+         "type" : "SCALAR"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 327168,
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 2,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 327168,
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 3,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 327168,
+         "type" : "VEC2"
+      },
+      {
+         "bufferView" : 4,
+         "byteOffset" : 0,
+         "componentType" : 5125,
+         "count" : 96768,
+         "type" : "SCALAR"
+      },
+      {
+         "bufferView" : 5,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 96768,
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 6,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 96768,
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 7,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 96768,
+         "type" : "VEC2"
+      }
+   ],
+   "asset" : {
+      "extras" : {
+         "GOOGLE_processor_version" : 346395741
+      },
+      "version" : "2.0"
+   },
+   "bufferViews" : [
+      {
+         "buffer" : 0,
+         "byteLength" : 1308672,
+         "byteOffset" : 0
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 3926016,
+         "byteOffset" : 1308672
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 3926016,
+         "byteOffset" : 5234688
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 2617344,
+         "byteOffset" : 9160704
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 387072,
+         "byteOffset" : 11778048
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 1161216,
+         "byteOffset" : 12165120
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 1161216,
+         "byteOffset" : 13326336
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 774144,
+         "byteOffset" : 14487552
+      }
+   ],
+   "buffers" : [
+      {
+         "byteLength" : 15261696,
+         "uri" : "model.bin"
+      }
+   ],
+   "cameras" : [
+      {
+         "perspective" : {
+            "yfov" : 0.7853981633974483,
+            "znear" : 0.1000000014901161
+         },
+         "type" : "perspective"
+      }
+   ],
+   "extensions" : {
+      "GOOGLE_lights_image_based" : {
+         "lights" : [
+            {
+               "intensity" : 1.5,
+               "pmremTexture" : {
+                  "index" : 0
+               },
+               "rotation" : 180
+            }
+         ]
+      },
+      "KHR_lights_punctual" : {
+         "lights" : [
+            {
+               "color" : [ 1, 0.9333333333333333, 0.8666666666666667 ],
+               "intensity" : 0.625,
+               "name" : "headLight",
+               "type" : "directional"
+            },
+            {
+               "color" : [ 1, 0.9333333333333333, 0.8666666666666667 ],
+               "intensity" : 0.8124999701976776,
+               "name" : "keyLight",
+               "type" : "directional"
+            }
+         ]
+      }
+   },
+   "extensionsUsed" : [
+      "GOOGLE_backgrounds",
+      "GOOGLE_lights_image_based",
+      "GOOGLE_camera_settings",
+      "KHR_lights_punctual"
+   ],
+   "extras" : {
+      "GOOGLE_initial_camera_motion" : {
+         "motionPath" : "FULL_ROTATION"
+      },
+      "GOOGLE_lighting_rig" : {
+         "disableShadows" : false
+      }
+   },
+   "images" : [
+      {
+         "uri" : "poly_pmrem_cubeuv_signal_hill_sunrise.jpg"
+      }
+   ],
+   "materials" : [
+      {
+         "alphaCutoff" : 0.5,
+         "alphaMode" : "OPAQUE",
+         "doubleSided" : true,
+         "emissiveFactor" : [ 0, 0, 0 ],
+         "extras" : {
+            "__iag_" : true
+         },
+         "name" : "BaseColor",
+         "pbrMetallicRoughness" : {
+            "baseColorFactor" : [ 0, 0, 1, 1 ],
+            "metallicFactor" : 0.8999999761581421,
+            "roughnessFactor" : 0
+         }
+      },
+      {
+         "alphaCutoff" : 0.5,
+         "alphaMode" : "OPAQUE",
+         "doubleSided" : false,
+         "emissiveFactor" : [ 0, 0, 0 ],
+         "extras" : {
+            "__iag_" : true
+         },
+         "name" : "PokeColor",
+         "pbrMetallicRoughness" : {
+            "baseColorFactor" : [ 1, 1, 1, 1 ],
+            "metallicFactor" : 1,
+            "roughnessFactor" : 1
+         }
+      }
+   ],
+   "meshes" : [
+      {
+         "primitives" : [
+            {
+               "attributes" : {
+                  "NORMAL" : 2,
+                  "POSITION" : 1,
+                  "TEXCOORD_0" : 3
+               },
+               "indices" : 0,
+               "material" : 0,
+               "mode" : 4
+            }
+         ]
+      },
+      {
+         "primitives" : [
+            {
+               "attributes" : {
+                  "NORMAL" : 6,
+                  "POSITION" : 5,
+                  "TEXCOORD_0" : 7
+               },
+               "indices" : 4,
+               "material" : 1,
+               "mode" : 4
+            }
+         ]
+      }
+   ],
+   "nodes" : [
+      {
+         "children" : [ 1, 4, 5 ],
+         "name" : "RootNode",
+         "rotation" : [ 0, 0, 0, 1 ],
+         "scale" : [ 1, 1, 1 ],
+         "translation" : [ 0, 0, 0 ]
+      },
+      {
+         "children" : [ 2, 3 ],
+         "name" : "Cube",
+         "rotation" : [ -0.7071068387877038, 0, 0, 0.7071067235853865 ],
+         "scale" : [ 1, 1, 1 ],
+         "translation" : [ 0, 0, 0 ]
+      },
+      {
+         "mesh" : 0,
+         "rotation" : [ 0, 0, 0, 1 ],
+         "scale" : [ 1, 1, 1 ],
+         "translation" : [ 0, 0, 0 ]
+      },
+      {
+         "mesh" : 1,
+         "rotation" : [ 0, 0, 0, 1 ],
+         "scale" : [ 1, 1, 1 ],
+         "translation" : [ 0, 0, 0 ]
+      },
+      {
+         "name" : "Light",
+         "rotation" : [
+            0.1690757056862663,
+            0.755880374520583,
+            -0.2721713326537732,
+            0.5709474851882469
+         ],
+         "scale" : [ 1.000000076293945, 1, 1 ],
+         "translation" : [ 4.076245422363281, 5.9038623046875, -1.00545394897461 ]
+      },
+      {
+         "name" : "Camera",
+         "rotation" : [
+            -0.2125572787003112,
+            0.9047969933360648,
+            -0.08438936465261368,
+            0.3592217132288407
+         ],
+         "scale" : [ 0.9999999999999998, 1.000000076293945, 0.9999999237060547 ],
+         "translation" : [ 7.3588916015625, 4.958309326171874, 6.925791015625001 ]
+      },
+      {
+         "children" : [ 7 ]
+      },
+      {
+         "children" : [ 8 ],
+         "extras" : {
+            "isTransformNode" : 1
+         },
+         "translation" : [ -0.009989495035480626, -0.009968033052622224, 0.0008236111897673647 ]
+      },
+      {
+         "children" : [ 0 ],
+         "translation" : [ 0.009989495035480626, 0.009968033052622224, -0.0008236111897673647 ]
+      },
+      {
+         "camera" : 0,
+         "children" : [ 10 ],
+         "rotation" : [
+            -0.0007340143321435429,
+            0.996418308656552,
+            0.08410946021241356,
+            0.008695636822743437
+         ],
+         "translation" : [ 0.08950751495299869, 0.9590153145924353, -5.696523939599789 ]
+      },
+      {
+         "extensions" : {
+            "KHR_lights_punctual" : {
+               "light" : 0
+            }
+         },
+         "extras" : {
+            "isHeadLight" : 1
+         },
+         "name" : "headLightNode",
+         "translation" : [ -1.84344962958603, 0.9217248147930148, 0.9217248147930148 ]
+      },
+      {
+         "extensions" : {
+            "KHR_lights_punctual" : {
+               "light" : 1
+            }
+         },
+         "extras" : {
+            "isKeyLight" : 1
+         },
+         "name" : "keyLightNode",
+         "rotation" : [ -0.7505326882858236, -0.3752663441429118, 0, 0.5439447166468927 ],
+         "scale" : [ 0, 0, 1.86188412588189 ],
+         "translation" : [ -1.839601921499691, 3.612357215563576, -1.928730721762152 ]
+      }
+   ],
+   "scene" : 0,
+   "scenes" : [
+      {
+         "extensions" : {
+            "GOOGLE_backgrounds" : {
+               "color" : [ 0.9803921568627451, 0.9803921568627451, 0.9803921568627451 ]
+            },
+            "GOOGLE_camera_settings" : {
+               "mode" : "movableOrbit",
+               "pivot" : [ -0.009940327051007447, -0.009881367208723457, 0.0008220892192447593 ]
+            },
+            "GOOGLE_lights_image_based" : {
+               "light" : 0
+            }
+         },
+         "extras" : {
+            "GOOGLE_camera_index" : {
+               "cameraIndex" : 0,
+               "nodeIndex" : 9
+            },
+            "GOOGLE_geometry_data" : {
+               "stats" : {
+                  "centroid" : [ 0.02228220438219879, -0.1114110362002039, -0.06684659588026179 ],
+                  "radius" : 1.84344962958603,
+                  "stdev" : 1.213270649872226
+               },
+               "visualCenterPoint" : [ -0.009989495035480626, -0.009968033052622224, 0.0008236111897673647 ]
+            }
+         },
+         "nodes" : [ 6, 9, 11 ]
+      }
+   ]
+}

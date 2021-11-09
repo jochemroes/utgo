@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/GroupCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_empty_background"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/mid_small_padding_lr"
+    android:paddingRight="@dimen/mid_small_padding_lr">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="@dimen/group_card_height"
+        android:layout_weight=".7"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/Name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/group_title_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

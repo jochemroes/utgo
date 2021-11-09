@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/quests">
+
+    <fragment
+        android:id="@+id/quests"
+        android:name="nl.utwente.utgo.QuestsFragment"
+        android:label="fragment_quests"
+        tools:layout="@layout/fragment_quests" />
+    <fragment
+        android:id="@+id/map"
+        android:name="nl.utwente.utgo.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/play"
+        android:name="nl.utwente.utgo.PlayFragment"
+        android:label="fragment_play"
+        tools:layout="@layout/fragment_play" />
+    <fragment
+        android:id="@+id/leaderboards"
+        android:name="nl.utwente.utgo.LeaderboardsFragment"
+        android:label="fragment_leaderboards"
+        tools:layout="@layout/fragment_leaderboards" />
+    <fragment
+        android:id="@+id/profile"
+        android:name="nl.utwente.utgo.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/settings"
+        android:name="nl.utwente.utgo.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>
