@@ -254,17 +254,14 @@ public class MainActivity extends AppCompatActivity {
      * @param slideRight If the animation for the transaction slides right (if not it slides left)
      */
     public void fragmentTransaction(Fragment selected, boolean useGradient, boolean slideRight) {
-        View.OnClickListener listener = null;
         int rightIconSrc = -1;
         if (selected.equals(profile)) {
             rightIconSrc = R.drawable.ic_baseline_settings_24;
-            listener = settingsClickedListener;
         }
         if (selected.equals(settings)) {
             rightIconSrc = R.drawable.ic_baseline_close_24;
-            listener = settingsClickedListener;
         }
-        changeTitleBar(-1, selected.getTag(), rightIconSrc, listener);
+        changeTitleBar(-1, selected.getTag(), rightIconSrc, settingsClickedListener);
 
         if (useGradient) {
             titleCard.setBackground(getResources().getDrawable(R.drawable.gradient_from_top));
@@ -318,43 +315,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.map);
     }
 
-    /**
-     * Class that can hide the splash screen logo in parallel
-     */
-    public class LogoHider implements Runnable {
-        @Override
-        public void run() {
-            hideLogoAnimation();
-        }
-    }
-
-    /**
-     * Hide the splash screen logo
-     */
-    public void hideLogoAnimation() {
-        int dimen = getResources().getDimensionPixelSize(R.dimen.splash_screen_logo_dimen);
-        View view = findViewById(R.id.CoverLogo);
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        ValueAnimator anim = ValueAnimator.ofInt(dimen, 0);
-        anim.addUpdateListener(valueAnimator -> {
-            int val = (Integer) valueAnimator.getAnimatedValue();
-            params.width = val;
-            params.height = val;
-            view.setLayoutParams(params);
-        });
-        anim.addListener(new AnimatorListenerAdapter()
-        {
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                view.setVisibility(View.INVISIBLE);
-            }
-        });
-        anim.setStartDelay(200);
-        anim.setDuration(1000);
-        anim.start();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -377,12 +337,6 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.Theme_LocationbasedARGame);
         setContentView(R.layout.activity_main);
 
-        new Handler().postDelayed(new LogoHider(), 100);
-
-        View cover = findViewById(R.id.CoverMain);
-        Animation coverFadeOut = AnimationUtils.loadAnimation(this, R.anim.cover_fade_out);
-        cover.startAnimation(coverFadeOut);
-        cover.setVisibility(View.INVISIBLE);
         ARLocationPermissionHelper.requestPermission(this);
 
         titleCard = findViewById(R.id.TitleCard);
