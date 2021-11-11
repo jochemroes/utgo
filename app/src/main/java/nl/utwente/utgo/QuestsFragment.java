@@ -97,28 +97,13 @@ public class QuestsFragment extends Fragment {
         adapter = new PagerAdapter(this, 3, PagerAdapter.ContentType.QUESTS);
         viewPager = view.findViewById(R.id.quests_view_pager);
         viewPager.setAdapter(adapter);
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                if (position < adapter.getFragmentCount())
-                    ((QuestsContent) adapter.getFragment(position)).changeTitleBar();
-            }
-        });
         TabLayout tabLayout = view.findViewById(R.id.quests_tab_layout);
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     tab.setText(tabNames[position]);
-                    tab.view.setClickable(false);
+                    tab.view.setClickable(true);
                 }
         ).attach();
     }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden) {
-            ((QuestsContent) adapter.getFragment(viewPager.getCurrentItem())).changeTitleBar();
-        }
-    }
-
 
 }
