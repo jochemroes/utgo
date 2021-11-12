@@ -842,7 +842,7 @@ public class PlayFragment extends FullScreenFragment {
      * @return Input view that calls the submit function of a puzzle when filled in
      */
     public View createInput(Puzzle puzzle) {
-        View view = getLayoutInflater().inflate(R.layout.text_input, container, false);
+        LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.text_input, container, false);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
         params.setMargins(0, 0, 0, 10);
 
@@ -864,7 +864,7 @@ public class PlayFragment extends FullScreenFragment {
                         int xp = xpQuest.getXp();
                         displayMessage("Congratulations!", xp + " xp has been added to your account and groups!");
                     } else {
-                        displayMessage("Congratulations!", "You have finished the quest!");
+                        displayMessage("Congratulations!", "You have completed the quest!");
                     }
                 }
                 if (handled) {
@@ -880,6 +880,12 @@ public class PlayFragment extends FullScreenFragment {
             }
             return handled;
         });
+
+        LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
+        Button button = buttonContainer.findViewById(R.id.mc_button);
+        button.setText("Submit answer");
+        button.setOnClickListener(v -> editText.onEditorAction(EditorInfo.IME_ACTION_SEND));
+        view.addView(buttonContainer);
         return view;
     }
 
