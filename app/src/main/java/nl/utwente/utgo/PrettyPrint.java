@@ -85,9 +85,9 @@ public class PrettyPrint {
      */
     public static String membersPrettyPrint(List<String> members) {
         if (members.size() == 1) {
-            return "This team has 1 member: " + members.get(0);
+            return "Your team has 1 member: " + members.get(0);
         }
-        String toPrint = "This team has " + members.size() + " members: ";
+        String toPrint = "Your team has " + members.size() + " members: ";
         for (int i = 0; i < members.size() - 2; i++) {
             toPrint += members.get(i) + ", ";
         }
@@ -104,9 +104,9 @@ public class PrettyPrint {
     public static String memberCountPrettyPrint(int memberCount, String title) {
         String titleLower = title.toLowerCase();
         if (memberCount == 1) {
-            return "This " + titleLower + " has 1 member.";
+            return "Your " + titleLower + " has 1 member.";
         }
-        return "This " + titleLower + " has " + memberCount + " members.";
+        return "Your " + titleLower + " has " + memberCount + " members.";
     }
 
     /**
