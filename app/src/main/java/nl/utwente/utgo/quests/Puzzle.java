@@ -32,6 +32,7 @@ public class Puzzle {
     private Map<Integer, List<Pair<String, String>>> augImgUrlsMap;
     private Map<Integer, List<AR3DObject>> ar3DObjectsMap;
     private String story;
+    private boolean canSkip = false;
 
     public static final String TAG = "PuzzleClass";
 
@@ -325,24 +326,32 @@ public class Puzzle {
      */
     public boolean checkAnswer(String ans) {
         boolean pCorrectlyAnswered = ans.toLowerCase().equals(correctAnswer.toLowerCase());
-        if (pCorrectlyAnswered) {
-            if (order == enclosingQuest.getPuzzles().size()-1) {
-                //quest is done
-                //TODO handle xp from quest.
-                if (enclosingQuest instanceof XpQuest) {
-                    XpQuest test = (XpQuest) enclosingQuest;
-                    int xp = test.getXp();
-                    Firestore.updateXp(xp);
-                }
-                Log.i(TAG, "Quest :" + enclosingQuest.getTitle() + " has been completed!");
-            } else {
-                //setpuzzle to next puzzle
-                enclosingQuest.getActivity().getPlayFragment()
-                        .setPuzzle(enclosingQuest.getPuzzle(order+1));
-            }
-        }
+        if (pCorrectlyAnswered) skip();
         correctlyAnswered = pCorrectlyAnswered;
         return correctlyAnswered;
+    }
+
+    /**
+     * Skips the puzzle
+     */
+    public void skip() {
+        if (order == enclosingQuest.getPuzzles().size()-1) {
+            //quest is done
+            if (enclosingQuest instanceof XpQuest) {
+                XpQuest test = (XpQuest) enclosingQuest;
+                int xp = test.getXp();
+                Firestore.updateXp(xp);
+            }
+            Log.i(TAG, "Quest :" + enclosingQuest.getTitle() + " has been completed!");
+        } else {
+            //setpuzzle to next puzzle
+            enclosingQuest.getActivity().getPlayFragment()
+                    .setPuzzle(enclosingQuest.getPuzzle(order+1));
+        }
+    }
+
+    public boolean isSkippable() {
+        return canSkip;
     }
 
     /**

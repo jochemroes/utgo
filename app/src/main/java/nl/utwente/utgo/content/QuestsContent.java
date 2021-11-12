@@ -32,15 +32,9 @@ public class QuestsContent extends Content {
     public enum Sort {TIME, XP}
     private Query[] queries = {Query.ALL, Query.XP, Query.REWARD};
     private Query query;
-    private Sort sort;
 
     public QuestsContent(int position) {
         query = queries[position];
-        if (query == Query.XP) {
-            sort = Sort.XP;
-        } else {
-            sort = Sort.TIME;
-        }
     }
 
     @Override
@@ -67,7 +61,7 @@ public class QuestsContent extends Content {
         } else {
             if (query == Query.ALL) {
                 toDisplay.addAll(quests);
-            } else {
+            } else { // Query.REWARD
                 for(Quest q : quests) {
                     if (q instanceof RewardQuest) { toDisplay.add(q); }
                 }
