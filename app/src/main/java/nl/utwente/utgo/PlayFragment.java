@@ -703,6 +703,7 @@ public class PlayFragment extends FullScreenFragment {
         View hintButton = createHintButton(puzzle, 0);
         if (hintButton != null) popup.addView(hintButton);
         popup.addView(createInput(puzzle));
+        if (puzzle.isSkippable()) popup.addView(createSkipButton(puzzle));
         hideAllViews(popup);
         popup.getChildAt(0).setVisibility(View.VISIBLE);
         displayPopup(title);
@@ -880,6 +881,33 @@ public class PlayFragment extends FullScreenFragment {
             return handled;
         });
         return view;
+    }
+
+    /**
+     * Creates a skip button
+     * @return Skip button that goes the next puzzle
+     */
+    public View createSkipButton(Puzzle puzzle) {
+        LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
+        Button button = buttonContainer.findViewById(R.id.mc_button);
+        button.setText("Skip this puzzle");
+        button.setOnClickListener(v -> {
+            puzzle.skip();
+            if (puzzle.getOrder() + 1 == puzzle.getEnclosingQuest().getnPuzzles()) {
+                Quest enclosing = puzzle.getEnclosingQuest();
+                if (enclosing instanceof XpQuest) {
+                    XpQuest xpQuest = (XpQuest) enclosing;
+                    int xp = xpQuest.getXp();
+                    displayMessage("Congratulations!", xp + " xp has been added to your account and groups!");
+                } else {
+                    displayMessage("Congratulations!", "You have completed the quest!");
+                }
+            }
+            removeQuestLocationMarkers();
+            augmentedImage.removeNodesAugmented();
+            augmentedImage.removeAugmentedDataBase();
+        });
+        return buttonContainer;
     }
 
     public DeviceLocation getDeviceLocation() {
