@@ -62,16 +62,15 @@ public class MainActivity extends AppCompatActivity {
         Fragment current = getCurrentFragment();
 
         java.util.Map<Integer, Object[]> valueMap = new HashMap<>();
-        valueMap.put(R.id.quests, new Object[] {quests, false, false});
-        valueMap.put(R.id.map, new Object[] {map, true, current instanceof QuestsFragment});
-        valueMap.put(R.id.play, new Object[] {play, true, current instanceof QuestsFragment || current instanceof MapFragment});
-        valueMap.put(R.id.leaderboards, new Object[] {leaderboards, false, !(current instanceof ProfileFragment || current instanceof SettingsFragment)});
-        valueMap.put(R.id.profile, new Object[] {profile, false, !(current instanceof SettingsFragment)});
+        valueMap.put(R.id.quests, new Object[] {quests, false});
+        valueMap.put(R.id.map, new Object[] {map, current instanceof QuestsFragment});
+        valueMap.put(R.id.play, new Object[] {play, current instanceof QuestsFragment || current instanceof MapFragment});
+        valueMap.put(R.id.leaderboards, new Object[] {leaderboards, !(current instanceof ProfileFragment || current instanceof SettingsFragment)});
+        valueMap.put(R.id.profile, new Object[] {profile, !(current instanceof SettingsFragment)});
 
         Object[] values = valueMap.get(item.getItemId());
         Fragment selected = (Fragment) values[0];
-        Boolean useGradient = (Boolean) values[1];
-        Boolean slideRight = (Boolean) values[2];
+        Boolean slideRight = (Boolean) values[1];
 
         if (current.equals(selected)) {
             return true;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         pageStack.remove(Integer.valueOf(item.getItemId()));
         pageStack.add(0, item.getItemId());
 
-        fragmentTransaction(selected, useGradient, slideRight);
+        fragmentTransaction(selected, slideRight);
 
         return true;
     };
@@ -150,11 +149,11 @@ public class MainActivity extends AppCompatActivity {
             pageStack.remove(Integer.valueOf(R.id.settings));
             pageStack.remove(Integer.valueOf(R.id.profile));
             pageStack.add(0, R.id.profile);
-            fragmentTransaction(profile, false, false);
+            fragmentTransaction(profile, false);
         } else {
             pageStack.remove(Integer.valueOf(R.id.settings));
             pageStack.add(0, R.id.settings);
-            fragmentTransaction(settings, false, true);
+            fragmentTransaction(settings, true);
         }
     }
 
@@ -250,10 +249,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Selects and displays a fragment
      * @param selected Fragment to be selected
-     * @param useGradient If the title bar uses a gradient (for Map and Play) or is filled
      * @param slideRight If the animation for the transaction slides right (if not it slides left)
      */
-    public void fragmentTransaction(Fragment selected, boolean useGradient, boolean slideRight) {
+    public void fragmentTransaction(Fragment selected, boolean slideRight) {
         int rightIconSrc = -1;
         if (selected.equals(profile)) {
             rightIconSrc = R.drawable.ic_baseline_settings_24;
@@ -263,13 +261,6 @@ public class MainActivity extends AppCompatActivity {
         }
         changeTitleBar(-1, selected.getTag(), rightIconSrc, settingsClickedListener);
 
-        if (useGradient) {
-            titleCard.setBackground(getResources().getDrawable(R.drawable.gradient_from_top));
-            bottomMenu.setBackground(getResources().getDrawable(R.drawable.gradient_from_bottom));
-        } else {
-            titleCard.setBackgroundColor(Color.parseColor("#1C1C1C"));
-            bottomMenu.setBackgroundColor(Color.parseColor("#1C1C1C"));
-        }
         int[] anim;
         if (slideRight) {
             anim = new int[] {R.anim.enter_rl, R.anim.exit_lr, R.anim.enter_lr, R.anim.exit_rl};
