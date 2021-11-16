@@ -73,8 +73,6 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
     private OnCompleteListener<QuerySnapshot> questsToMarker;
     private List<Marker> questMarkers;
 
-    private View cover;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -172,7 +170,6 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        cover = view.findViewById(R.id.CoverMap);
 
         //stuff to register the map
         SupportMapFragment supMapFrag = new SupportMapFragment();
@@ -186,24 +183,6 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
         supMapFrag.getMapAsync(MapFragment.this);
         Log.i(TAG, "onMapReadyCallback registered!");
         return view;
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden) {
-            if (getCoverAnimation()) {
-                onResume();
-                Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.cover_fade_out);
-                cover.startAnimation(fadeOut);
-            }
-            cover.setVisibility(View.INVISIBLE);
-        }
-        else {
-            onPause();
-            /*Animation fadeIn = AnimationUtils.loadAnimation(getContext(),R.anim.cover_fade_in);
-            cover.startAnimation(fadeIn);
-            cover.setVisibility(View.VISIBLE);*/
-        }
     }
 
     @Override

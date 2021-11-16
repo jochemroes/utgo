@@ -12,7 +12,7 @@
         android:id="@+id/quests_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/header_footer"
         android:clickable="false"
         android:elevation="10dp"
         android:paddingTop="@dimen/page_title_height"

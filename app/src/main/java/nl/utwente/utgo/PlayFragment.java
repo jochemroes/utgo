@@ -98,7 +98,6 @@ public class PlayFragment extends FullScreenFragment {
     private ArrayList<LocationMarker> locationMarkers = new ArrayList<>();
 
     private ViewGroup container;
-    private View cover;
     private View popupParent;
     private View popupButton;
     private LinearLayout popup;
@@ -159,38 +158,16 @@ public class PlayFragment extends FullScreenFragment {
         View view = inflater.inflate(R.layout.fragment_play, container, false);
         this.container = container;
         locationScene = null; //TODO save as much information without crashing later
-        cover = view.findViewById(R.id.CoverPlay);
         popupButton = view.findViewById(R.id.popup_button);
-        popupButton.setVisibility(View.VISIBLE);
         popupButton.setOnClickListener(v -> {
             displayPopup();
         });
         popupParent = view.findViewById(R.id.play_popup);
-        View popupClose = view.findViewById(R.id.close_button);
+        View popupClose = view.findViewById(R.id.PopupTitle);
         popupClose.setOnClickListener(v -> hidePopup());
         popup = view.findViewById(R.id.inner_play_popup);
         displayGPSMessage();
         return view;
-    }
-
-    /**
-     * Fade out animation is shown when fragment is opened.
-     *
-     * @param hidden if the fragment is shown(false) or hidden(true)
-     */
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden) {
-            if (getCoverAnimation()) {
-                Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.cover_fade_out);
-                cover.startAnimation(fadeOut);
-            }
-            cover.setVisibility(View.INVISIBLE);
-        } else {
-            /*Animation fadeIn = AnimationUtils.loadAnimation(getContext(),R.anim.cover_fade_in);
-            cover.setVisibility(View.VISIBLE);
-            cover.startAnimation(fadeIn);*/
-        }
     }
 
     /**
@@ -635,7 +612,6 @@ public class PlayFragment extends FullScreenFragment {
     }
 
     public void displayPopup() {
-        popupButton.setVisibility(View.INVISIBLE);
         if (popupParent.getVisibility() == View.INVISIBLE) {
             popupParent.setVisibility(View.VISIBLE);
             popupParent.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.popup));
@@ -737,7 +713,6 @@ public class PlayFragment extends FullScreenFragment {
             popupParent.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.popdown));
             popupParent.setVisibility(View.INVISIBLE);
         }
-        popupButton.setVisibility(View.VISIBLE);
     }
 
     /**
