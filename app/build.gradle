@@ -14,6 +14,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        //multidex
+        //multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -52,4 +55,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    /*-- ACRA   --*/
+    def acraVersion = '5.8.4'
+    //use acra via mail and communicate to user with toasts
+    //implementation "ch.acra:acra:${acraVersion}"
+    implementation "ch.acra:acra-mail:${acraVersion}"
+    implementation "ch.acra:acra-toast:${acraVersion}"
+    //does not contain any optional plugins
+
+    //multidex, possible fix for acra
+    //implementation 'androidx.multidex:multidex:2.0.1'
 }
