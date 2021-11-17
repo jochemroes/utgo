@@ -20,6 +20,17 @@ import org.acra.config.MailSenderConfigurationBuilderFactory;
 import org.acra.config.ToastConfigurationBuilder;
 import org.acra.data.StringFormat;
 
+
+/**
+ * UTGO Application class which is instantiated before all activities
+ * Registered under AndroidManifest/manifest/application/android:name
+ *
+ * Current behavior (other frontends/backends are possible):
+ * ACRA starts -> activities start -> app crashes -> present toasts with info to user
+ * -> opens mail client of user with message ready to send
+ * -> user presses send -> winning winning winning
+ */
+//annotation needed for ACRA
 @AcraCore(buildConfigClass = BuildConfig.class)
 public class UtgoApp extends Application {
 
@@ -32,16 +43,15 @@ public class UtgoApp extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
-
-
-
+        //create new configuration builder
         CoreConfigurationBuilder builder = new CoreConfigurationBuilder(this);
-        //config
+
+        //core config
         builder
                 .setBuildConfigClass(BuildConfig.class)
                     .setReportFormat(StringFormat.JSON);
 
-        //configure toasts
+        //configure crash toast
         builder
                 .getPluginConfigurationBuilder(ToastConfigurationBuilder.class)
                     .setEnabled(true)
@@ -50,7 +60,7 @@ public class UtgoApp extends Application {
                     //.setReportSendSuccessToast(R.string.crash_toast_success)
                     //.setReportSendFailureToast("Crash report fail :(")
 
-        //configure mail
+        //configure mail sender
         builder
                 .getPluginConfigurationBuilder(MailSenderConfigurationBuilder.class)
                     .setEnabled(true)
@@ -65,6 +75,7 @@ public class UtgoApp extends Application {
                 .setReportSendSuccessToast(getResources().getString(R.string.crash_toast_success))
                 .setReportSendFailureToast(getResources().getString(R.string.crash_toast_failure));
 
+        //initialize ACRA with current config
         ACRA.init(this,builder);
     }
 }
