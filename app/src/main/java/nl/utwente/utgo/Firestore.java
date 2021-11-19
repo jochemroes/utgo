@@ -192,6 +192,20 @@ public final class Firestore {
         xpCol.document("c6cSfLk8i5W4f4eggM2I").collection("puzzles").document().set(puzzleMap);
     }
 
+    public static void createXpQuest(double lat, double lon, String color, String description, int minPlayers, int nPuzzles, String title, int until, int xp){
+        Map<String, Object> questMap = new HashMap<>();
+        questMap.put("Loc", new GeoPoint(lat, lon));
+        questMap.put("color", color);
+        questMap.put("description", description);
+        questMap.put("minPlayers", minPlayers);
+        questMap.put("npuzzles", nPuzzles);
+        questMap.put("title", title);
+        questMap.put("until", until);
+        questMap.put("xp", xp);
+
+        xpCol.add(questMap);
+    }
+
     /**
      * @return The maximum allowed team size
      */
