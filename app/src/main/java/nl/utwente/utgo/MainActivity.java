@@ -371,6 +371,8 @@ public class MainActivity extends AppCompatActivity {
         Firestore.setFragments(this);
         Firestore.getAllData();
 
+        //addPromenadePuzzle();
+
         // this line creates the Promenade quest
         //Firestore.createXpQuest(52.24366953004293, 6.851830590432058, "#FFB900", "The Promenade is a road surrounded by different facilities, but which ones?", 1, 1, "Promenade Quest", 0, 25);
     }
@@ -404,5 +406,26 @@ public class MainActivity extends AppCompatActivity {
             groupMap.put("member_count", 0);
             Firestore.getStudyCol().add(groupMap);
         }
+    }*/
+
+    /*private void addPromenadePuzzle() {
+        ArrayList<String> hintList = new ArrayList<>();
+        hintList.add("0 means it is NOT located at the Promenade, 1 means it is");
+        hintList.add("There is a University shop (Union Shop) located at the Bastille building");
+        hintList.add("There is no church on the campus");
+
+        ArrayList<String> emptyStringArray = new ArrayList<>();
+        emptyStringArray.add("");
+
+        ArrayList<Integer> emptyIntegerArray = new ArrayList<>();
+        emptyIntegerArray.add(0);
+
+        ArrayList<Boolean> emptyBooleanArray = new ArrayList<>();
+        emptyBooleanArray.add(false);
+
+        Firestore.createPuzzle("uqMeiZWDeC6PGQLZ2SIQ", 52.24366953004293, 6.851830590432058,
+                "Gym", hintList, 0, 0, emptyStringArray, emptyStringArray,
+                emptyIntegerArray, emptyBooleanArray, emptyStringArray, "Hey find the answer he");
+
     }*/
 }

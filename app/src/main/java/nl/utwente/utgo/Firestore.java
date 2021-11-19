@@ -171,7 +171,6 @@ public final class Firestore {
                                     ArrayList<String> promptList, String story) {
         Map<String, Object> puzzleMap = new HashMap<>();
 
-        // 2 empty string fields in array
         ArrayList<String> emptyStringArray = new ArrayList<>();
         emptyStringArray.add("");
 
