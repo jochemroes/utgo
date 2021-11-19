@@ -370,6 +370,9 @@ public class MainActivity extends AppCompatActivity {
         // load data
         Firestore.setFragments(this);
         Firestore.getAllData();
+
+        // this line creates the Promenade quest
+        //Firestore.createXpQuest(52.24366953004293, 6.851830590432058, "#FFB900", "The Promenade is a road surrounded by different facilities, but which ones?", 1, 1, "Promenade Quest", 0, 25);
     }
 
     @Override

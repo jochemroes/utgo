@@ -94,7 +94,7 @@ public final class Firestore {
     protected static final String QUEST_MIN_PLAYERS = "minPlayers";
 
     //puzzle fields in Firestore
-    protected static final String PUZZLE_LOCATION_FIELD = "Loc";
+    protected static final String PUZZLE_LOC = "Loc";
     @Deprecated
     protected static final String PUZZLE_3D_OBJ_URL = "3dObjUrl";
     @Deprecated
@@ -102,22 +102,22 @@ public final class Firestore {
     protected static final String PUZZLE_ANSWER = "answer";
     @Deprecated
     protected static final String PUZZLE_HINTS = "hints";
-    protected static final String PUZZLE_HINTS_MAP = "hintMap";
+    protected static final String PUZZLE_HINT_MAP = "hintMap";
     protected static final String PUZZLE_ORDER = "order";
     @Deprecated
     protected static final String PUZZLE_PROMPT = "prompt";
     protected static final String PUZZLE_TYPE = "type";
     @Deprecated
-    protected static final String PUZZLE_HEIGHTS = "3dObjHeights";
+    protected static final String PUZZLE_3D_OBJ_HEIGHTS = "3dObjHeights";
     @Deprecated
-    protected static final String PUZZLE_CAN_TURNS = "canTurn";
-    protected static final String PUZZLE_AUG_IMG_MAP = "augImgUrlMap";
-    protected static final String PUZZLE_AUG_IMG_MAP_P1 = "p1";
-    protected static final String PUZZLE_AUG_IMG_MAP_P2 = "p2";
-    protected static final String PUZZLE_AUG_IMG_MAP_P3 = "p3";
+    protected static final String PUZZLE_CAN_TURN = "canTurn";
+    protected static final String PUZZLE_AUG_IMG_URL_MAP = "augImgUrlMap";
+    protected static final String PUZZLE_P1 = "p1";
+    protected static final String PUZZLE_P2 = "p2";
+    protected static final String PUZZLE_P3 = "p3";
     protected static final String PUZZLE_3D_OBJ_URL_MAP = "3dObjUrlMap";
-    protected static final String PUZZLE_HEIGHTS_MAP = "3dObjHeightsMap";
-    protected static final String PUZZLE_CAN_TURNS_MAP = "canTurnMap";
+    protected static final String PUZZLE_3D_OBJ_HEIGHTS_MAP = "3dObjHeightsMap";
+    protected static final String PUZZLE_CAN_TURN_MAP = "canTurnMap";
     protected static final String PUZZLE_PROMPT_ARR = "promptArr";
     protected static final String PUZZLE_STORY = "story";
 
@@ -163,45 +163,113 @@ public final class Firestore {
     protected static Dogroup dogroup;
     protected static StudyAssociation study;
 
-    public static void createVrijhofPuzzle(Puzzle puzzle) {
+
+    public static void createPuzzle(String uidQuest, double lat, double lon, String answer,
+                                    ArrayList<String> hintList, int order, int type,
+                                    ArrayList<String> augImgUrlList, ArrayList<String> objUrlList,
+                                    ArrayList<Integer> objHeigthsList, ArrayList<Boolean> canTurnList,
+                                    ArrayList<String> promptList, String story) {
         Map<String, Object> puzzleMap = new HashMap<>();
+
+        // 2 empty string fields in array
+        ArrayList<String> emptyStringArray = new ArrayList<>();
+        emptyStringArray.add("");
+
+        ArrayList<Integer> emptyIntegerArray = new ArrayList<>();
+        emptyIntegerArray.add(0);
+
+        ArrayList<Boolean> emptyBooleanArray = new ArrayList<>();
+        emptyBooleanArray.add(false);
+
+        // empty values for deprecated fields
+        ArrayList<String> objUrl = new ArrayList<>();
+        objUrl.add("");
+        objUrl.add("");
+        objUrl.add("");
+
+        ArrayList<String> augImgUrl = new ArrayList<>();
+        augImgUrl.add("");
+        augImgUrl.add("");
+        augImgUrl.add("");
+        augImgUrl.add("");
+        augImgUrl.add("");
+        augImgUrl.add("");
+
+        ArrayList<String> hints = new ArrayList<>();
+        hints.add("");
+        hints.add("");
+        hints.add("");
+
         ArrayList<Integer> heights = new ArrayList<>();
-        ArrayList<String> urls = new ArrayList<>();
-        List<Boolean> canTurn = new ArrayList<>();
+        heights.add(0);
+        heights.add(0);
+        heights.add(0);
 
+        ArrayList<Boolean> canTurn = new ArrayList<>();
         canTurn.add(false);
         canTurn.add(false);
         canTurn.add(false);
 
-        for (int i = 0; i < puzzle.getAr3DObjects().size(); i++) {
-            heights.add(puzzle.getAr3DObjects().get(i).getHeight());
-            urls.add(puzzle.getAr3DObjects().get(i).getUrl());
-        }
-        puzzleMap.put("3dObjHeights", heights);
-        puzzleMap.put("3dObjUrl", urls);
-        puzzleMap.put("Loc", puzzle.getLocation());
-        puzzleMap.put("answer", puzzle.getCorrectAnswer());
-        //puzzleMap.put("augImgUrl", );
-        puzzleMap.put("augImgUrlMap", puzzle.getAugmentedImageUrlMap());
-        puzzleMap.put("canTurn", canTurn);
-        puzzleMap.put("hintMap", puzzle.getHintMap());
-        //puzzleMap.put("hints", puzzle.getHints());
-        puzzleMap.put("order", puzzle.getOrder());
-        puzzleMap.put("prompt", puzzle.getPrompt());
-        puzzleMap.put("type", puzzle.getType());
-        xpCol.document("c6cSfLk8i5W4f4eggM2I").collection("puzzles").document().set(puzzleMap);
+        // filling puzzleMap
+        puzzleMap.put(PUZZLE_LOC, new GeoPoint(lat, lon));
+        puzzleMap.put(PUZZLE_3D_OBJ_URL, emptyStringArray);
+        puzzleMap.put(PUZZLE_AUG_IMG_URL, emptyStringArray);
+        puzzleMap.put(PUZZLE_ANSWER, answer);
+        puzzleMap.put(PUZZLE_HINTS, emptyStringArray);
+
+        Map<String, ArrayList<String>> hintMap = new HashMap<>();
+        hintMap.put(PUZZLE_P1, hintList);
+        hintMap.put(PUZZLE_P2, hintList);
+        hintMap.put(PUZZLE_P3, hintList);
+        puzzleMap.put(PUZZLE_HINT_MAP, hintMap);
+
+        puzzleMap.put(PUZZLE_ORDER, order);
+        puzzleMap.put(PUZZLE_PROMPT, "");
+        puzzleMap.put(PUZZLE_TYPE, type);
+        puzzleMap.put(PUZZLE_3D_OBJ_HEIGHTS, heights);
+        puzzleMap.put(PUZZLE_CAN_TURN, canTurn);
+
+        Map<String, ArrayList<String>> augImgUrlMap = new HashMap<>();
+        augImgUrlMap.put(PUZZLE_P1, augImgUrlList);
+        augImgUrlMap.put(PUZZLE_P2, emptyStringArray);
+        augImgUrlMap.put(PUZZLE_P3, emptyStringArray);
+        puzzleMap.put(PUZZLE_AUG_IMG_URL_MAP, augImgUrlMap);
+
+        Map<String, ArrayList<String>> objUrlMap = new HashMap<>();
+        objUrlMap.put(PUZZLE_P1, objUrlList);
+        objUrlMap.put(PUZZLE_P2, emptyStringArray);
+        objUrlMap.put(PUZZLE_P3, emptyStringArray);
+        puzzleMap.put(PUZZLE_3D_OBJ_URL_MAP, objUrlMap);
+
+        Map<String, ArrayList<Integer>> objHeightsMap = new HashMap<>();
+        objHeightsMap.put(PUZZLE_P1, objHeigthsList);
+        objHeightsMap.put(PUZZLE_P2, emptyIntegerArray);
+        objHeightsMap.put(PUZZLE_P3, emptyIntegerArray);
+        puzzleMap.put(PUZZLE_3D_OBJ_HEIGHTS_MAP, objHeightsMap);
+
+        Map<String, ArrayList<Boolean>> canTurnMap = new HashMap<>();
+        canTurnMap.put(PUZZLE_P1, canTurnList);
+        canTurnMap.put(PUZZLE_P2, emptyBooleanArray);
+        canTurnMap.put(PUZZLE_P3, emptyBooleanArray);
+        puzzleMap.put(PUZZLE_CAN_TURN_MAP, canTurnMap);
+
+        puzzleMap.put(PUZZLE_PROMPT_ARR, promptList);
+        puzzleMap.put(PUZZLE_STORY, story);
+
+
+        xpCol.document(uidQuest).collection("puzzles").document().set(puzzleMap);
     }
 
     public static void createXpQuest(double lat, double lon, String color, String description, int minPlayers, int nPuzzles, String title, int until, int xp){
         Map<String, Object> questMap = new HashMap<>();
-        questMap.put("Loc", new GeoPoint(lat, lon));
-        questMap.put("color", color);
-        questMap.put("description", description);
-        questMap.put("minPlayers", minPlayers);
-        questMap.put("npuzzles", nPuzzles);
-        questMap.put("title", title);
-        questMap.put("until", until);
-        questMap.put("xp", xp);
+        questMap.put(QUEST_LOCATION_FIELD, new GeoPoint(lat, lon));
+        questMap.put(QUEST_COLOR_FIELD, color);
+        questMap.put(QUEST_DESCRIPTION_FIELD, description);
+        questMap.put(QUEST_MIN_PLAYERS, minPlayers);
+        questMap.put(QUEST_NUM_PUZZLES, nPuzzles);
+        questMap.put(QUEST_TITLE_FIELD, title);
+        questMap.put(QUEST_UNTIL_FIELD, until);
+        questMap.put(QUEST_XP_FIELD, xp);
 
         xpCol.add(questMap);
     }
@@ -646,9 +714,9 @@ public final class Firestore {
      */
     private static Map<Integer, List<Pair<String, String>>> transformAugMap(Map<String, List<String>> raw) {
         Map<String, Integer> playerMap = new HashMap<>();
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P1, 0);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P2, 1);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P3, 2);
+        playerMap.put(PUZZLE_P1, 0);
+        playerMap.put(PUZZLE_P2, 1);
+        playerMap.put(PUZZLE_P3, 2);
 
         Map<Integer, List<Pair<String, String>>> res = new HashMap<>();
         for (String player : raw.keySet()) {
@@ -672,9 +740,9 @@ public final class Firestore {
      */
     private static Map<Integer, List<String>> transformStringMap(Map<String, List<String>> raw) {
         Map<String, Integer> playerMap = new HashMap<>();
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P1, 0);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P2, 1);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P3, 2);
+        playerMap.put(PUZZLE_P1, 0);
+        playerMap.put(PUZZLE_P2, 1);
+        playerMap.put(PUZZLE_P3, 2);
 
         Map<Integer, List<String>> res = new HashMap<>();
         for (String player : raw.keySet()) {
@@ -685,9 +753,9 @@ public final class Firestore {
 
     private static Map<Integer, List<Long>> transformNumberMap(Map<String, List<Long>> raw) {
         Map<String, Integer> playerMap = new HashMap<>();
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P1, 0);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P2, 1);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P3, 2);
+        playerMap.put(PUZZLE_P1, 0);
+        playerMap.put(PUZZLE_P2, 1);
+        playerMap.put(PUZZLE_P3, 2);
 
         Map<Integer, List<Long>> res = new HashMap<>();
         for(String player : raw.keySet()) {
@@ -698,9 +766,9 @@ public final class Firestore {
 
     private static Map<Integer, List<Boolean>> transformBoolMap(Map<String, List<Boolean>> raw) {
         Map<String, Integer> playerMap = new HashMap<>();
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P1, 0);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P2, 1);
-        playerMap.put(PUZZLE_AUG_IMG_MAP_P3, 2);
+        playerMap.put(PUZZLE_P1, 0);
+        playerMap.put(PUZZLE_P2, 1);
+        playerMap.put(PUZZLE_P3, 2);
 
         Map<Integer, List<Boolean>> res = new HashMap<>();
         for(String player : raw.keySet()) {
@@ -749,7 +817,7 @@ public final class Firestore {
                         if (pTask.isSuccessful()) {
                             //puzzle get success
                             for (DocumentSnapshot pDoc : pTask.getResult().getDocuments()) {
-                                GeoPoint pLoc = pDoc.getGeoPoint(PUZZLE_LOCATION_FIELD);
+                                GeoPoint pLoc = pDoc.getGeoPoint(PUZZLE_LOC);
                                 Puzzle tempPuzzle = new Puzzle(temp);
                                 LatLng pLocg = new LatLng(pLoc.getLatitude(), pLoc.getLongitude());
                                 //get the puzzle type
@@ -762,16 +830,16 @@ public final class Firestore {
                                     augTemp.add(new Pair<String, String>(raw.get(i), raw.get(i+1)));
                                 }*/
                                 //get the augmented image map
-                                Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_MAP);
+                                Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_URL_MAP);
 
                                 //get the 3d objects
                                 Map<Integer, List<AR3DObject>> ar3DObjects = new HashMap<>();
                                 Map<Integer, List<String>> objectUrls =
                                         (Map<Integer, List<String>>) transformStringMap((Map<String, List<String>>) pDoc.get(PUZZLE_3D_OBJ_URL_MAP));
                                 Map<Integer, List<Long>> objectHeights =
-                                        (Map<Integer, List<Long>>) transformNumberMap((Map<String, List<Long>>) pDoc.get(PUZZLE_HEIGHTS_MAP));
+                                        (Map<Integer, List<Long>>) transformNumberMap((Map<String, List<Long>>) pDoc.get(PUZZLE_3D_OBJ_HEIGHTS_MAP));
                                 Map<Integer, List<Boolean>> objectCanTurns =
-                                        (Map<Integer, List<Boolean>>) transformBoolMap((Map<String, List<Boolean>>) pDoc.get(PUZZLE_CAN_TURNS_MAP));
+                                        (Map<Integer, List<Boolean>>) transformBoolMap((Map<String, List<Boolean>>) pDoc.get(PUZZLE_CAN_TURN_MAP));
                                 for (Integer i : objectUrls.keySet()) {
                                     List<AR3DObject> temparobjlist = new ArrayList<>();
                                     List<String> playerObjectUrl = objectUrls.get(i);
@@ -797,7 +865,7 @@ public final class Firestore {
                                         .setStory(pDoc.getString(PUZZLE_STORY))
                                         /*.setAR3DObjects(ar3DObjects)*/
                                         .setAR3DObjectsMap(ar3DObjects)
-                                        .setHintMap(transformStringMap((Map<String, List<String>>) pDoc.get(PUZZLE_HINTS_MAP)))
+                                        .setHintMap(transformStringMap((Map<String, List<String>>) pDoc.get(PUZZLE_HINT_MAP)))
                                         /*.setHints((List<String>) pDoc.get(PUZZLE_HINTS))*/
                                         .setOrder(pDoc.getLong(PUZZLE_ORDER).intValue());
                                 temp.addPuzzle(tempPuzzle);
@@ -841,7 +909,7 @@ public final class Firestore {
                         if (pTask.isSuccessful()) {
                             //puzzle get success
                             for (DocumentSnapshot pDoc : pTask.getResult().getDocuments()) {
-                                GeoPoint pLoc = pDoc.getGeoPoint(PUZZLE_LOCATION_FIELD);
+                                GeoPoint pLoc = pDoc.getGeoPoint(PUZZLE_LOC);
                                 Puzzle tempPuzzle = new Puzzle(temp);
                                 LatLng pLocg = new LatLng(pLoc.getLatitude(), pLoc.getLongitude());
                                 //get the puzzle type
@@ -855,15 +923,15 @@ public final class Firestore {
                                     augTemp.add(new Pair<String, String>(raw.get(i), raw.get(i+1)));
                                 }*/
                                 //get the augmented image map
-                                Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_MAP);
+                                Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_URL_MAP);
                                 //get the 3d objects
                                 Map<Integer, List<AR3DObject>> ar3DObjects = new HashMap<>();
                                 Map<Integer, List<String>> objectUrls =
                                         (Map<Integer, List<String>>) transformStringMap((Map<String, List<String>>) pDoc.get(PUZZLE_3D_OBJ_URL_MAP));
                                 Map<Integer, List<Long>> objectHeights =
-                                        (Map<Integer, List<Long>>) transformNumberMap((Map<String, List<Long>>) pDoc.get(PUZZLE_HEIGHTS_MAP));
+                                        (Map<Integer, List<Long>>) transformNumberMap((Map<String, List<Long>>) pDoc.get(PUZZLE_3D_OBJ_HEIGHTS_MAP));
                                 Map<Integer, List<Boolean>> objectCanTurns =
-                                        (Map<Integer, List<Boolean>>) transformBoolMap((Map<String, List<Boolean>>) pDoc.get(PUZZLE_CAN_TURNS_MAP));
+                                        (Map<Integer, List<Boolean>>) transformBoolMap((Map<String, List<Boolean>>) pDoc.get(PUZZLE_CAN_TURN_MAP));
                                 for (Integer i : objectUrls.keySet()) {
                                     List<AR3DObject> temparobjlist = new ArrayList<>();
                                     List<String> playerObjectUrl = objectUrls.get(i);
@@ -890,7 +958,7 @@ public final class Firestore {
                                         .setAR3DObjectsMap(ar3DObjects)
                                         /*.setAR3DObjects(ar3DObjects)*/
                                         /*.setHints((List<String>) pDoc.get(PUZZLE_HINTS))*/
-                                        .setHintMap(transformStringMap((Map<String, List<String>>) pDoc.get(PUZZLE_HINTS_MAP)))
+                                        .setHintMap(transformStringMap((Map<String, List<String>>) pDoc.get(PUZZLE_HINT_MAP)))
                                         .setOrder(pDoc.getLong(PUZZLE_ORDER).intValue());
                                 temp.addPuzzle(tempPuzzle);
 
