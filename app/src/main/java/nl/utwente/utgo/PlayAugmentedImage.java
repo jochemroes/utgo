@@ -374,7 +374,7 @@ public class PlayAugmentedImage {
     }
 
     /**
-     * Sets the Image Found in the url on the noe as a renderable.
+     * Sets the Image Found in the url on the node as a renderable.
      *
      * @param node the node that the image should be desplayed on
      * @param url the url that contains the image to download and display
