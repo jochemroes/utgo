@@ -32,36 +32,9 @@ public class QuestsContent extends Content {
     public enum Sort {TIME, XP}
     private Query[] queries = {Query.ALL, Query.XP, Query.REWARD};
     private Query query;
-    private Sort sort;
 
     public QuestsContent(int position) {
         query = queries[position];
-        if (query == Query.XP) {
-            sort = Sort.XP;
-        } else {
-            sort = Sort.TIME;
-        }
-    }
-
-    /**
-     * @return id of the icon related to what sort is selected
-     */
-    public int getIcon() {
-        if (sort == Sort.TIME) {
-            return R.drawable.ic_outline_timer_24;
-        }
-        return R.drawable.ic_outline_arrow_circle_up_24;
-    }
-
-    /**
-     * Changes the title bar with the current sort icon
-     */
-    public void changeTitleBar() {
-        if (query == Query.REWARD) {
-            ((MainActivity) getActivity()).changeTitleBar(-1, null, -1, null);
-        } else {
-            ((MainActivity) getActivity()).changeTitleBar(getIcon(), null, R.drawable.ic_outline_swap_horiz_24, getChangeSortListener());
-        }
     }
 
     @Override
@@ -70,86 +43,43 @@ public class QuestsContent extends Content {
         List<Quest> quests = Firestore.getQuestsList();
         List<Quest> toDisplay = new ArrayList<>();
 
-        //used for handling the type of quests
-        switch (query) {
-            case ALL:
-                toDisplay.addAll(quests);
-                break;
-            case XP:
-                for(Quest q : quests) {
-                    if (q instanceof XpQuest) { toDisplay.add(q); }
+        if (query == Query.XP) {
+            for(Quest q : quests) {
+                if (q instanceof XpQuest) { toDisplay.add(q); }
+            }
+            toDisplay.sort((o1, o2) -> {
+                XpQuest o3 = (XpQuest) o1;
+                XpQuest o4 = (XpQuest) o2;
+                if (o3.getXp() > o4.getXp()) {
+                    return -1;
+                } else if (o3.getXp() == o4.getXp()) {
+                    return 0;
+                } else {
+                    return 1;
                 }
-                break;
-            case REWARD:
+            });
+        } else {
+            if (query == Query.ALL) {
+                toDisplay.addAll(quests);
+            } else { // Query.REWARD
                 for(Quest q : quests) {
                     if (q instanceof RewardQuest) { toDisplay.add(q); }
                 }
-                break;
-        }
-
-        //used for handling the type of sorting
-        switch (sort) {
-            case TIME:
-                toDisplay.sort((o1, o2) -> {
-                    if (o1.getUntil() > o2.getUntil()) {
-                        return 1;
-                    } else if (o1.getUntil() == o2.getUntil()) {
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                });
-                break;
-
-            case XP:
-                //skip for reward queries
-                if(query == Query.REWARD) { break; }
-                List<RewardQuest> tempReward = new ArrayList<>();
-
-                //zonder deze iterator krijg je ConcurrentModificationException
-                Iterator<Quest> it = toDisplay.iterator();
-                while (it.hasNext()) {
-                    Quest tempq = it.next();
-                    if (tempq instanceof RewardQuest) {
-                        tempReward.add((RewardQuest) tempq);
-                        it.remove();
-                    }
+            }
+            toDisplay.sort((o1, o2) -> {
+                if (o1.getUntil() > o2.getUntil()) {
+                    return 1;
+                } else if (o1.getUntil() == o2.getUntil()) {
+                    return 0;
+                } else {
+                    return -1;
                 }
-                toDisplay.sort((o1, o2) -> {
-                    XpQuest o3 = (XpQuest) o1;
-                    XpQuest o4 = (XpQuest) o2;
-                    if (o3.getXp() > o4.getXp()) {
-                        return -1;
-                    } else if (o3.getXp() == o4.getXp()) {
-                        return 0;
-                    } else {
-                        return 1;
-                    }
-                });
-                toDisplay.addAll(tempReward);
-                break;
+            });
         }
         contentFiller.removeAllViews();
         for (Quest quest : toDisplay) {
             addCard(quest);
         }
-    }
-
-    /**
-     * @return Listener that changes the sort and refreshes the title bar
-     */
-    public View.OnClickListener getChangeSortListener() {
-        return v -> {
-            if (sort == Sort.TIME) {
-                sort = Sort.XP;
-                ((MainActivity) getActivity()).toast("Sorting by XP (high to low)");
-            } else {
-                sort = Sort.TIME;
-                ((MainActivity) getActivity()).toast("Sorting by time remaining (short to long)");
-            }
-            changeTitleBar();
-            loadContent();
-        };
     }
 
     /**

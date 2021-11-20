@@ -83,7 +83,7 @@ public class LeaderboardsFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     tab.setText(tabNames[position]);
-                    tab.view.setClickable(false);
+                    tab.view.setClickable(true);
                 }
         ).attach();
     }

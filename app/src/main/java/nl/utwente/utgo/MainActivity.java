@@ -62,16 +62,15 @@ public class MainActivity extends AppCompatActivity {
         Fragment current = getCurrentFragment();
 
         java.util.Map<Integer, Object[]> valueMap = new HashMap<>();
-        valueMap.put(R.id.quests, new Object[] {quests, false, false});
-        valueMap.put(R.id.map, new Object[] {map, true, current instanceof QuestsFragment});
-        valueMap.put(R.id.play, new Object[] {play, true, current instanceof QuestsFragment || current instanceof MapFragment});
-        valueMap.put(R.id.leaderboards, new Object[] {leaderboards, false, !(current instanceof ProfileFragment || current instanceof SettingsFragment)});
-        valueMap.put(R.id.profile, new Object[] {profile, false, !(current instanceof SettingsFragment)});
+        valueMap.put(R.id.quests, new Object[] {quests, false});
+        valueMap.put(R.id.map, new Object[] {map, current instanceof QuestsFragment});
+        valueMap.put(R.id.play, new Object[] {play, current instanceof QuestsFragment || current instanceof MapFragment});
+        valueMap.put(R.id.leaderboards, new Object[] {leaderboards, !(current instanceof ProfileFragment || current instanceof SettingsFragment)});
+        valueMap.put(R.id.profile, new Object[] {profile, !(current instanceof SettingsFragment)});
 
         Object[] values = valueMap.get(item.getItemId());
         Fragment selected = (Fragment) values[0];
-        Boolean useGradient = (Boolean) values[1];
-        Boolean slideRight = (Boolean) values[2];
+        Boolean slideRight = (Boolean) values[1];
 
         if (current.equals(selected)) {
             return true;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         pageStack.remove(Integer.valueOf(item.getItemId()));
         pageStack.add(0, item.getItemId());
 
-        fragmentTransaction(selected, useGradient, slideRight);
+        fragmentTransaction(selected, slideRight);
 
         return true;
     };
@@ -150,11 +149,11 @@ public class MainActivity extends AppCompatActivity {
             pageStack.remove(Integer.valueOf(R.id.settings));
             pageStack.remove(Integer.valueOf(R.id.profile));
             pageStack.add(0, R.id.profile);
-            fragmentTransaction(profile, false, false);
+            fragmentTransaction(profile, false);
         } else {
             pageStack.remove(Integer.valueOf(R.id.settings));
             pageStack.add(0, R.id.settings);
-            fragmentTransaction(settings, false, true);
+            fragmentTransaction(settings, true);
         }
     }
 
@@ -250,29 +249,18 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Selects and displays a fragment
      * @param selected Fragment to be selected
-     * @param useGradient If the title bar uses a gradient (for Map and Play) or is filled
      * @param slideRight If the animation for the transaction slides right (if not it slides left)
      */
-    public void fragmentTransaction(Fragment selected, boolean useGradient, boolean slideRight) {
-        View.OnClickListener listener = null;
+    public void fragmentTransaction(Fragment selected, boolean slideRight) {
         int rightIconSrc = -1;
         if (selected.equals(profile)) {
             rightIconSrc = R.drawable.ic_baseline_settings_24;
-            listener = settingsClickedListener;
         }
         if (selected.equals(settings)) {
             rightIconSrc = R.drawable.ic_baseline_close_24;
-            listener = settingsClickedListener;
         }
-        changeTitleBar(-1, selected.getTag(), rightIconSrc, listener);
+        changeTitleBar(-1, selected.getTag(), rightIconSrc, settingsClickedListener);
 
-        if (useGradient) {
-            titleCard.setBackground(getResources().getDrawable(R.drawable.gradient_from_top));
-            bottomMenu.setBackground(getResources().getDrawable(R.drawable.gradient_from_bottom));
-        } else {
-            titleCard.setBackgroundColor(Color.parseColor("#1C1C1C"));
-            bottomMenu.setBackgroundColor(Color.parseColor("#1C1C1C"));
-        }
         int[] anim;
         if (slideRight) {
             anim = new int[] {R.anim.enter_rl, R.anim.exit_lr, R.anim.enter_lr, R.anim.exit_rl};
@@ -318,43 +306,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.map);
     }
 
-    /**
-     * Class that can hide the splash screen logo in parallel
-     */
-    public class LogoHider implements Runnable {
-        @Override
-        public void run() {
-            hideLogoAnimation();
-        }
-    }
-
-    /**
-     * Hide the splash screen logo
-     */
-    public void hideLogoAnimation() {
-        int dimen = getResources().getDimensionPixelSize(R.dimen.splash_screen_logo_dimen);
-        View view = findViewById(R.id.CoverLogo);
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        ValueAnimator anim = ValueAnimator.ofInt(dimen, 0);
-        anim.addUpdateListener(valueAnimator -> {
-            int val = (Integer) valueAnimator.getAnimatedValue();
-            params.width = val;
-            params.height = val;
-            view.setLayoutParams(params);
-        });
-        anim.addListener(new AnimatorListenerAdapter()
-        {
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                view.setVisibility(View.INVISIBLE);
-            }
-        });
-        anim.setStartDelay(200);
-        anim.setDuration(1000);
-        anim.start();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -377,12 +328,6 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.Theme_LocationbasedARGame);
         setContentView(R.layout.activity_main);
 
-        new Handler().postDelayed(new LogoHider(), 100);
-
-        View cover = findViewById(R.id.CoverMain);
-        Animation coverFadeOut = AnimationUtils.loadAnimation(this, R.anim.cover_fade_out);
-        cover.startAnimation(coverFadeOut);
-        cover.setVisibility(View.INVISIBLE);
         ARLocationPermissionHelper.requestPermission(this);
 
         titleCard = findViewById(R.id.TitleCard);
@@ -457,4 +402,37 @@ public class MainActivity extends AppCompatActivity {
             Firestore.getStudyCol().add(groupMap);
         }
     }*/
+
+    /**
+     * Dear loyal student,
+     * Eerst een quest maken.
+     * Daarna pas puzzles toevoegen.
+     * Kind regards,
+     * Ruben
+     */
+    private void addQuest() {
+        Firestore.createXpQuest(52.24366953004293, 6.851830590432058,
+                "#FFB900", "The Promenade is a road surrounded by different facilities, but which ones?",
+                1, 1, "Promenade Quest", 0, 25);
+    }
+
+    private void addPuzzle() {
+        ArrayList<String> hintList = new ArrayList<>();
+        hintList.add("0 means it is NOT located at the Promenade, 1 means it is");
+        hintList.add("There is a University shop (Union Shop) located at the Bastille building");
+        hintList.add("There is no church on the campus");
+
+        ArrayList<String> emptyStringArray = new ArrayList<>();
+        emptyStringArray.add("");
+
+        ArrayList<Integer> emptyIntegerArray = new ArrayList<>();
+        emptyIntegerArray.add(0);
+
+        ArrayList<Boolean> emptyBooleanArray = new ArrayList<>();
+        emptyBooleanArray.add(false);
+
+        Firestore.createPuzzle("uqMeiZWDeC6PGQLZ2SIQ", 52.24366953004293, 6.851830590432058,
+                "Gym", hintList, 0, 0, emptyStringArray, emptyStringArray,
+                emptyIntegerArray, emptyBooleanArray, emptyStringArray, "Hey find the answer he");
+    }
 }

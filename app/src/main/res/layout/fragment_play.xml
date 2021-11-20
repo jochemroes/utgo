@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/play_popup_background"
+        android:elevation="10dp"
         android:orientation="vertical"
         android:paddingBottom="@dimen/scroll_padding_bottom"
         android:visibility="visible"
@@ -29,7 +30,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/TitleCardInner"
+                android:id="@+id/PopupTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -82,29 +83,17 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/CoverPlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#1C1C1C"
-        android:orientation="horizontal"
-        android:visibility="invisible"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-47dp">
-
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/popup_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/popup_button_dimen"
+        android:layout_height="@dimen/popup_button_dimen"
         android:layout_marginBottom="@dimen/scroll_padding_bottom"
         android:src="@drawable/ic_outline_keyboard_arrow_up_24"
-        android:tint="@color/text_color"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/ux_fragment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/text_color" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

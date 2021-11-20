@@ -6,26 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/CoverMain"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/background"
-        android:elevation="11dp"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </LinearLayout>
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/page_title_height"
-        android:background="@color/background"
+        android:background="@color/header_footer"
         app:elevation="10dp"
         app:itemIconTint="@drawable/tab_color"
         app:labelVisibilityMode="unlabeled"
@@ -49,24 +34,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/navigation" />
 
-    <ImageView
-        android:id="@+id/CoverLogo"
-        android:layout_width="@dimen/splash_screen_logo_dimen"
-        android:layout_height="@dimen/splash_screen_logo_dimen"
-        android:layout_weight="1"
-        android:elevation="12dp"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/splash_screen_logo" />
-
     <LinearLayout
         android:id="@+id/TitleCard"
         android:layout_width="match_parent"
         android:layout_height="@dimen/page_title_height"
-        android:background="@color/background"
+        android:background="@color/header_footer"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +77,6 @@
                 android:layout_weight=".2"
                 android:gravity="right|center"
                 android:padding="10dp"
-                android:src="@drawable/ic_baseline_settings_24"
                 app:tint="#FFFFFF" />
         </LinearLayout>
 

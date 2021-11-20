@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item  android:id="@+id/accentColor" >
         <shape android:shape="rectangle">
-            <solid android:color="@color/background" />
+            <solid android:color="@color/header_footer" />
             <corners
                 android:radius="@dimen/card_radius"
                 android:bottomLeftRadius="0dp"

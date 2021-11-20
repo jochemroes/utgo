@@ -98,7 +98,6 @@ public class PlayFragment extends FullScreenFragment {
     private ArrayList<LocationMarker> locationMarkers = new ArrayList<>();
 
     private ViewGroup container;
-    private View cover;
     private View popupParent;
     private View popupButton;
     private LinearLayout popup;
@@ -159,38 +158,16 @@ public class PlayFragment extends FullScreenFragment {
         View view = inflater.inflate(R.layout.fragment_play, container, false);
         this.container = container;
         locationScene = null; //TODO save as much information without crashing later
-        cover = view.findViewById(R.id.CoverPlay);
         popupButton = view.findViewById(R.id.popup_button);
-        popupButton.setVisibility(View.VISIBLE);
         popupButton.setOnClickListener(v -> {
             displayPopup();
         });
         popupParent = view.findViewById(R.id.play_popup);
-        View popupClose = view.findViewById(R.id.close_button);
+        View popupClose = view.findViewById(R.id.PopupTitle);
         popupClose.setOnClickListener(v -> hidePopup());
         popup = view.findViewById(R.id.inner_play_popup);
         displayGPSMessage();
         return view;
-    }
-
-    /**
-     * Fade out animation is shown when fragment is opened.
-     *
-     * @param hidden if the fragment is shown(false) or hidden(true)
-     */
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden) {
-            if (getCoverAnimation()) {
-                Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.cover_fade_out);
-                cover.startAnimation(fadeOut);
-            }
-            cover.setVisibility(View.INVISIBLE);
-        } else {
-            /*Animation fadeIn = AnimationUtils.loadAnimation(getContext(),R.anim.cover_fade_in);
-            cover.setVisibility(View.VISIBLE);
-            cover.startAnimation(fadeIn);*/
-        }
     }
 
     /**
@@ -635,7 +612,6 @@ public class PlayFragment extends FullScreenFragment {
     }
 
     public void displayPopup() {
-        popupButton.setVisibility(View.INVISIBLE);
         if (popupParent.getVisibility() == View.INVISIBLE) {
             popupParent.setVisibility(View.VISIBLE);
             popupParent.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.popup));
@@ -703,6 +679,7 @@ public class PlayFragment extends FullScreenFragment {
         View hintButton = createHintButton(puzzle, 0);
         if (hintButton != null) popup.addView(hintButton);
         popup.addView(createInput(puzzle));
+        if (puzzle.isSkippable()) popup.addView(createSkipButton(puzzle));
         hideAllViews(popup);
         popup.getChildAt(0).setVisibility(View.VISIBLE);
         displayPopup(title);
@@ -736,7 +713,6 @@ public class PlayFragment extends FullScreenFragment {
             popupParent.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.popdown));
             popupParent.setVisibility(View.INVISIBLE);
         }
-        popupButton.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -841,7 +817,7 @@ public class PlayFragment extends FullScreenFragment {
      * @return Input view that calls the submit function of a puzzle when filled in
      */
     public View createInput(Puzzle puzzle) {
-        View view = getLayoutInflater().inflate(R.layout.text_input, container, false);
+        LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.text_input, container, false);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
         params.setMargins(0, 0, 0, 10);
 
@@ -863,7 +839,7 @@ public class PlayFragment extends FullScreenFragment {
                         int xp = xpQuest.getXp();
                         displayMessage("Congratulations!", xp + " xp has been added to your account and groups!");
                     } else {
-                        displayMessage("Congratulations!", "You have finished the quest!");
+                        displayMessage("Congratulations!", "You have completed the quest!");
                     }
                 }
                 if (handled) {
@@ -879,7 +855,40 @@ public class PlayFragment extends FullScreenFragment {
             }
             return handled;
         });
+
+        LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
+        Button button = buttonContainer.findViewById(R.id.mc_button);
+        button.setText("Submit answer");
+        button.setOnClickListener(v -> editText.onEditorAction(EditorInfo.IME_ACTION_SEND));
+        view.addView(buttonContainer);
         return view;
+    }
+
+    /**
+     * Creates a skip button
+     * @return Skip button that goes the next puzzle
+     */
+    public View createSkipButton(Puzzle puzzle) {
+        LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
+        Button button = buttonContainer.findViewById(R.id.mc_button);
+        button.setText("Skip this puzzle");
+        button.setOnClickListener(v -> {
+            puzzle.skip();
+            if (puzzle.getOrder() + 1 == puzzle.getEnclosingQuest().getnPuzzles()) {
+                Quest enclosing = puzzle.getEnclosingQuest();
+                if (enclosing instanceof XpQuest) {
+                    XpQuest xpQuest = (XpQuest) enclosing;
+                    int xp = xpQuest.getXp();
+                    displayMessage("Congratulations!", xp + " xp has been added to your account and groups!");
+                } else {
+                    displayMessage("Congratulations!", "You have completed the quest!");
+                }
+            }
+            removeQuestLocationMarkers();
+            augmentedImage.removeNodesAugmented();
+            augmentedImage.removeAugmentedDataBase();
+        });
+        return buttonContainer;
     }
 
     public DeviceLocation getDeviceLocation() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <item name="match_parent" format="integer" type="dimen">-1</item>
     <item name="wrap_content" format="integer" type="dimen">-2</item>
 
@@ -13,8 +14,6 @@
     <dimen name="subtab_padding_bottom">60dp</dimen>
 
     <dimen name="splash_screen_logo_dimen">150dp</dimen>
-    <dimen name="splash_screen_logo_radius">50dp</dimen>
-    <dimen name="splash_screen_logo_png_size">230dp</dimen>
 
     <dimen name="sort_icon_dimen">40dp</dimen>
 
@@ -55,13 +54,12 @@
 
     <!-- Quest Card Contracted -->
     <dimen name="quest_icon_title_height_con">0dp</dimen>
-    <dimen name="quest_name_padding_tb_con">0dp</dimen> <!-- should be half of icon title height -->
+    <dimen name="quest_name_padding_tb_con">0dp</dimen> <!-- should be quest_icon_title_height_con/2 -->
     <dimen name="quest_buttons_height_con">0dp</dimen>
 
     <!-- Quest Card Expanded -->
-
     <dimen name="quest_icon_title_height_exp">30dp</dimen>
-    <dimen name="quest_name_padding_tb_exp">15dp</dimen> <!-- should be half of icon title height -->
+    <dimen name="quest_name_padding_tb_exp">15dp</dimen> <!-- should be quest_icon_title_height_exp/2 -->
     <dimen name="quest_buttons_height_exp">50dp</dimen>
 
     <!-- Group Card -->
@@ -72,10 +70,9 @@
 
     <!-- Small Card -->
     <dimen name="small_height">90dp</dimen>
-    <dimen name="small_place_size">25dp</dimen>
+    <dimen name="small_place_size">20dp</dimen>
 
     <dimen name="empty_space_height">40dp</dimen>
     <dimen name="input_bottom_padding">5dp</dimen>
-
 
 </resources>

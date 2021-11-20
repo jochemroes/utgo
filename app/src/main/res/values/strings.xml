@@ -13,4 +13,14 @@
     <string name="enter_your_username">Enter your username</string>
     <string name="choose_a_username">Choose a username</string>
     <string name="username_should_be_between_3_and_15_characters">Username should be between 3 and 15 characters</string>
+
+
+    <!-- CRASH REPORTS -->
+    <string name="crash_toast_text">UTGO Crashed D: sending crash report.</string>
+    <string name="crash_toast_success">Sending crash report success :)</string>
+    <string name="crash_toast_failure">Sending crash report failed :(</string>
+    <string name="utgomail">utgo.game@gmail.com</string>
+    <string name="crash_trace_fname">UTGOCrash.txt</string>
+    <string name="crash_mail_subject">UTGOCRASH</string>
+    <string name="crash_mail_body">Dear students,\n\nHere is the crash report\n\nKind regards,\nUTGO</string>
 </resources>
