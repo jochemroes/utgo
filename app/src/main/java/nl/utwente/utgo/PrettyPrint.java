@@ -51,15 +51,16 @@ public class PrettyPrint {
     public static float rgbToHue(String rgb) {
         //parse string to RGB values
         if (rgb == null) {return 0f;}
-        int red, green, blue;
+        float red, green, blue;
         if (rgb.charAt(0) != '#') {return 0f;}
-        red = Integer.parseInt("" + rgb.charAt(1) + rgb.charAt(2), 16);
-        green = Integer.parseInt("" + rgb.charAt(3) + rgb.charAt(4), 16);
-        blue = Integer.parseInt("" + rgb.charAt(5) + rgb.charAt(6), 16);
+        red = Long.parseLong("" + rgb.charAt(1) + rgb.charAt(2), 16)/255f;
+        green = Long.parseLong("" + rgb.charAt(3) + rgb.charAt(4), 16)/255f;
+        blue = Long.parseLong("" + rgb.charAt(5) + rgb.charAt(6), 16)/255f;
+
 
         //compute degree on color wheel (hue)
-        int min = Math.min(Math.min(red,green),blue);
-        int max = Math.max(Math.max(red,green),blue);
+        float min = Math.min(Math.min(red,green),blue);
+        float max = Math.max(Math.max(red,green),blue);
         float res = 0f;
 
         if (min==max) {return 0;}
