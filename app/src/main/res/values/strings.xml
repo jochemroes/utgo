@@ -20,7 +20,7 @@
     <string name="crash_toast_success">Sending crash report success :)</string>
     <string name="crash_toast_failure">Sending crash report failed :(</string>
     <string name="utgomail">utgo.game@gmail.com</string>
-    <string name="crash_trace_fname">UTGOCrash.txt</string>
+    <string name="crash_trace_fname">UTGOCrash.json</string>
     <string name="crash_mail_subject">UTGOCRASH</string>
     <string name="crash_mail_body">Dear students,\n\nHere is the crash report\n\nKind regards,\nUTGO</string>
 </resources>
