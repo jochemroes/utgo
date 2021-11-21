@@ -253,6 +253,10 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
     public void loadMarkers() {
         if(mMap == null) { return; }
         for (Quest q : Firestore.getQuestsList()) {
+            //skip this quest if remaining time is not positive
+            if(q.getRemainingTime() <= 0) { continue; }
+
+            //only do this if remaining quest time > 0
             MarkerOptions opt = new MarkerOptions().position(q.getLocation()).title(q.getTitle());
             opt.icon(BitmapDescriptorFactory.defaultMarker(PrettyPrint.rgbToHue(q.getColor())));
             opt.snippet(q.getDescription());
