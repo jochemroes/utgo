@@ -9,7 +9,7 @@
     <string name="profile">Profile</string>
     <string name="studyass">Study\nAssocations</string>
     <string name="title_activity_maps">Map</string>
-    <string name="login_with_google_to_play_ut_go">Log in with your Google account to play UT GO!</string>
+    <string name="login_with_google_to_play_ut_go">Log in with your Google account to play UT-GO!</string>
     <string name="enter_your_username">Enter your username</string>
     <string name="choose_a_username">Choose a username</string>
     <string name="username_should_be_between_3_and_15_characters">Username should be between 3 and 15 characters</string>
