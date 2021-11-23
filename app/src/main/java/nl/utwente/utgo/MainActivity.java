@@ -22,10 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nl.utwente.utgo.arcorelocation.utils.ARLocationPermissionHelper;
 import nl.utwente.utgo.quests.Quest;
@@ -62,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
         Fragment current = getCurrentFragment();
 
         java.util.Map<Integer, Object[]> valueMap = new HashMap<>();
-        valueMap.put(R.id.quests, new Object[] {quests, false});
-        valueMap.put(R.id.map, new Object[] {map, current instanceof QuestsFragment});
-        valueMap.put(R.id.play, new Object[] {play, current instanceof QuestsFragment || current instanceof MapFragment});
-        valueMap.put(R.id.leaderboards, new Object[] {leaderboards, !(current instanceof ProfileFragment || current instanceof SettingsFragment)});
-        valueMap.put(R.id.profile, new Object[] {profile, !(current instanceof SettingsFragment)});
+        valueMap.put(R.id.quests, new Object[]{quests, false});
+        valueMap.put(R.id.map, new Object[]{map, current instanceof QuestsFragment});
+        valueMap.put(R.id.play, new Object[]{play, current instanceof QuestsFragment || current instanceof MapFragment});
+        valueMap.put(R.id.leaderboards, new Object[]{leaderboards, !(current instanceof ProfileFragment || current instanceof SettingsFragment)});
+        valueMap.put(R.id.profile, new Object[]{profile, !(current instanceof SettingsFragment)});
 
         Object[] values = valueMap.get(item.getItemId());
         Fragment selected = (Fragment) values[0];
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         if (current.equals(selected)) {
             return true;
         }
-        if (selected instanceof  FullScreenFragment) {
+        if (selected instanceof FullScreenFragment) {
             if (current instanceof FullScreenFragment) {
                 ((FullScreenFragment) selected).setCoverAnimation(false);
             } else {
@@ -103,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @return The Play Fragment
      */
-    public PlayFragment getPlayFragment() { return play; }
+    public PlayFragment getPlayFragment() {
+        return play;
+    }
 
     /**
      * @return The Profile Fragment
@@ -115,20 +119,27 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @return The Map Fragment
      */
-    public MapFragment getMapFragment() { return map; }
+    public MapFragment getMapFragment() {
+        return map;
+    }
 
     /**
      * @return The Leaderboards Fragment
      */
-    public LeaderboardsFragment getLeaderboardsFragment() { return leaderboards; }
+    public LeaderboardsFragment getLeaderboardsFragment() {
+        return leaderboards;
+    }
 
     /**
      * @return The Settings Fragment
      */
-    public SettingsFragment getSettingsFragment() { return settings; }
+    public SettingsFragment getSettingsFragment() {
+        return settings;
+    }
 
     /**
      * Sets a quest as selected and opens the Play fragment
+     *
      * @param quest The quest
      */
     public void setSelectedQuest(Quest quest) {
@@ -161,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Displays a message
+     *
      * @param msg The message
      */
     public void toast(String msg) {
@@ -172,10 +184,11 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Returns the currently selected and displayed fragment
+     *
      * @return
      */
     public Fragment getCurrentFragment() {
-        for (String tag : new String[] {"Quests", "Map", "Play", "Leaderboards", "Profile", "Settings"}) {
+        for (String tag : new String[]{"Quests", "Map", "Play", "Leaderboards", "Profile", "Settings"}) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
             if (fragment.isVisible()) {
                 System.err.println("Current is: " + fragment.getTag());
@@ -191,9 +204,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Changes the icons and title of the title bar
-     * @param leftIconSrc Image src for the left icon
-     * @param title Title
-     * @param rightIconSrc Image src for the right icon
+     *
+     * @param leftIconSrc   Image src for the left icon
+     * @param title         Title
+     * @param rightIconSrc  Image src for the right icon
      * @param rightListener Listener that performs an action when the right icon is pressed
      */
     public void changeTitleBar(int leftIconSrc, String title, int rightIconSrc, View.OnClickListener rightListener) {
@@ -205,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Changes the left icon of the title bar
+     *
      * @param leftIconSrc Image src for the icon
      */
     public void changeLeftIcon(int leftIconSrc) {
@@ -221,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Changes the title of the title bar
+     *
      * @param title The title
      */
     public void changeTitle(String title) {
@@ -232,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Changes the right icon of the title bar
+     *
      * @param rightIconSrc Image src for the icon
      */
     public void changeRightIcon(int rightIconSrc) {
@@ -248,7 +265,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Selects and displays a fragment
-     * @param selected Fragment to be selected
+     *
+     * @param selected   Fragment to be selected
      * @param slideRight If the animation for the transaction slides right (if not it slides left)
      */
     public void fragmentTransaction(Fragment selected, boolean slideRight) {
@@ -263,9 +281,9 @@ public class MainActivity extends AppCompatActivity {
 
         int[] anim;
         if (slideRight) {
-            anim = new int[] {R.anim.enter_rl, R.anim.exit_lr, R.anim.enter_lr, R.anim.exit_rl};
+            anim = new int[]{R.anim.enter_rl, R.anim.exit_lr, R.anim.enter_lr, R.anim.exit_rl};
         } else {
-            anim = new int[] {R.anim.enter_lr, R.anim.exit_rl, R.anim.enter_rl, R.anim.exit_lr};
+            anim = new int[]{R.anim.enter_lr, R.anim.exit_rl, R.anim.enter_rl, R.anim.exit_lr};
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -288,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         pageStack.remove(0);
-        
+
         if (pageStack.get(0).equals(R.id.settings)) {
             toggleSettings();
         } else {
@@ -299,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Opens the map and select the marker related to a quest
+     *
      * @param quest The quest of which the marker is to be selected
      */
     public void openQuestInMap(Quest quest) {
@@ -370,6 +389,7 @@ public class MainActivity extends AppCompatActivity {
         // load data
         Firestore.setFragments(this);
         Firestore.getAllData();
+        //addPuzzle();
     }
 
     @Override
@@ -389,19 +409,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*private void addStudyAssociations() {
-        String[] list = new String[] {
+    private void addStudyAssociations() {
+        String[] list = new String[]{
                 "Abacus", "Communique", "Paradoks", "Scintilla", "Dimensie", "Alembic", "Atlantis", "Arago",
                 "Astatine", "Proto", "Daedalus", "Ideefiks", "Isaac Newton", "Komma", "H.V. Ockham", "SAB",
                 "Sirius", "Stress", "ConcepT", "Inter-Actief"};
-        for(String groupName : list) {
+        for (String groupName : list) {
             Map<String, Object> groupMap = new HashMap<>();
             groupMap.put("name", groupName);
             groupMap.put("xp", 0);
             groupMap.put("member_count", 0);
             Firestore.getStudyCol().add(groupMap);
         }
-    }*/
+    }
 
     /**
      * Dear loyal student,
@@ -411,16 +431,17 @@ public class MainActivity extends AppCompatActivity {
      * Ruben
      */
     private void addQuest() {
-        Firestore.createXpQuest(52.24366953004293, 6.851830590432058,
-                "#FFB900", "The Promenade is a road surrounded by different facilities, but which ones?",
-                1, 1, "Promenade Quest", 0, 25);
+        Firestore.createXpQuest(52.239053, 6.855883,
+                "#1D428A", "Inter-Actief is the study association for the studies Technical Computer Science, Business\n" +
+                        "Information Technology and the corresponding masters at the University of Twente.",
+                1, 1, "Inter-Actief", 0, 25);
     }
 
     private void addPuzzle() {
         ArrayList<String> hintList = new ArrayList<>();
-        hintList.add("0 means it is NOT located at the Promenade, 1 means it is");
-        hintList.add("There is a University shop (Union Shop) located at the Bastille building");
-        hintList.add("There is no church on the campus");
+        hintList.add("");
+        hintList.add("");
+        hintList.add("");
 
         ArrayList<String> emptyStringArray = new ArrayList<>();
         emptyStringArray.add("");
@@ -431,8 +452,9 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Boolean> emptyBooleanArray = new ArrayList<>();
         emptyBooleanArray.add(false);
 
-        Firestore.createPuzzle("uqMeiZWDeC6PGQLZ2SIQ", 52.24366953004293, 6.851830590432058,
-                "Gym", hintList, 0, 0, emptyStringArray, emptyStringArray,
-                emptyIntegerArray, emptyBooleanArray, emptyStringArray, "Hey find the answer he");
+        Firestore.createPuzzle("yup6hfpVVeTrtXYyTFN6", 52.24415, 6.852336,
+                "4", hintList, 0, 0, emptyStringArray, emptyStringArray,
+                emptyIntegerArray, emptyBooleanArray, emptyStringArray,
+                "");
     }
 }
