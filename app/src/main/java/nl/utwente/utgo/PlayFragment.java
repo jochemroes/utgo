@@ -915,6 +915,7 @@ public class PlayFragment extends FullScreenFragment {
                     downloaded = true;
                 } catch (IOException e) {
                     Log.i(TAG, "no internet for downloading location based image/object");
+                    Log.i(TAG, e.getMessage());
                     //e.printStackTrace();
                 }
             }

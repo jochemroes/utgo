@@ -284,7 +284,14 @@ public class Puzzle {
      * @return - itself
      */
     public Puzzle setCorrectAnswer(String ans) {
-        if (correctAnswer == "") { correctAnswer = ans; }
+        if (correctAnswer == "") {
+            if (ans == null) {
+                canSkip = true;
+                correctAnswer = "";
+            } else {
+                correctAnswer = ans;
+            }
+        }
         return this;
     }
 
