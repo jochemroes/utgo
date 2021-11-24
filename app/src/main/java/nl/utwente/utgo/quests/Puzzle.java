@@ -33,7 +33,6 @@ public class Puzzle {
     private Map<Integer, List<AR3DObject>> ar3DObjectsMap;
     private String story;
     private boolean canSkip = false;
-
     public static final String TAG = "PuzzleClass";
 
     @Deprecated
@@ -285,10 +284,7 @@ public class Puzzle {
      */
     public Puzzle setCorrectAnswer(String ans) {
         if (correctAnswer == "") {
-            if (ans == null) {
-                canSkip = true;
-                correctAnswer = "";
-            } else {
+            if (ans != null) {
                 correctAnswer = ans;
             }
         }
@@ -359,6 +355,10 @@ public class Puzzle {
 
     public boolean isSkippable() {
         return canSkip;
+    }
+
+    public boolean hasPrompt(int playerNum) {
+        return prompts.get(playerNum % prompts.size()) != null;
     }
 
     /**
