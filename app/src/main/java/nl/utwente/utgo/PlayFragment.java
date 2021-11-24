@@ -668,20 +668,27 @@ public class PlayFragment extends FullScreenFragment {
         Quest quest = puzzle.getEnclosingQuest();
         String title = quest.getTitle()
                 + " (" + (puzzle.getOrder() + 1) + "/" + quest.getnPuzzles() + ")";
-        String description = puzzle.getPrompt(Firestore.getQuestRole());
+        int role = Firestore.getQuestRole();
+        boolean hasPrompt = puzzle.hasPrompt(role);
         String story = "";
         if (puzzle.getOrder() == 0) story += "Hey, " + Firestore.player.getName() + "!\n\n";
         story += puzzle.getStory();
 
         popup.removeAllViews();
-        popup.addView(createStoryButton(story));
-        popup.addView(createTextView(description));
-        View hintButton = createHintButton(puzzle, 0);
-        if (hintButton != null) popup.addView(hintButton);
-        popup.addView(createInput(puzzle));
-        if (puzzle.isSkippable()) popup.addView(createSkipButton(puzzle));
+        popup.addView(createStoryButton(story, hasPrompt));
+        if (hasPrompt) {
+            String description = puzzle.getPrompt(role);
+            popup.addView(createTextView(description));
+            View hintButton = createHintButton(puzzle, 0);
+            if (hintButton != null) popup.addView(hintButton);
+            popup.addView(createInput(puzzle));
+            if (puzzle.isSkippable()) popup.addView(createSkipButton(puzzle, "Skip this question"));
+        }
         hideAllViews(popup);
         popup.getChildAt(0).setVisibility(View.VISIBLE);
+        if (!hasPrompt) {
+            popup.addView(createSkipButton(puzzle, "Next"));
+        }
         displayPopup(title);
     }
 
@@ -772,42 +779,49 @@ public class PlayFragment extends FullScreenFragment {
      * @param story The story of a puzzle in String form
      * @return the view that contains the buttons and the story text field
      */
-    public View createStoryButton(String story) {
+    public View createStoryButton(String story, boolean hasPrompt) {
         TextView storyView = createTextView(story);
         LinearLayout storyContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
         LinearLayout hideButtonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
         storyContainer.addView(storyView);
-        storyContainer.addView(hideButtonContainer);
 
         Button showButton = storyContainer.findViewById(R.id.mc_button);
         Button hideButton = hideButtonContainer.findViewById(R.id.mc_button);
 
-        showButton.setText("< story");
-        showButton.setOnClickListener(v -> {
-            popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_lr));
-            hideAllViews(popup);
-            storyContainer.setVisibility(View.VISIBLE);
-            showButton.setVisibility(View.GONE);
-            storyView.setVisibility(View.VISIBLE);
-            hideButton.setVisibility(View.VISIBLE);
-            popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_lr));
-        });
+        if (hasPrompt) {
+            storyContainer.addView(hideButtonContainer);
 
-        hideButton.setText("question >");
-        hideButton.setOnClickListener(v -> {
-            popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_rl));
-            showAllViews(popup);
-            showButton.setVisibility(View.VISIBLE);
-            storyView.setVisibility(View.GONE);
-            hideButton.setVisibility(View.GONE);
-            popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_rl));
-        });
+            showButton.setText("< story");
+            showButton.setOnClickListener(v -> {
+                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_lr));
+                hideAllViews(popup);
+                storyContainer.setVisibility(View.VISIBLE);
+                showButton.setVisibility(View.GONE);
+                storyView.setVisibility(View.VISIBLE);
+                hideButton.setVisibility(View.VISIBLE);
+                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_lr));
+            });
+
+            hideButton.setText("question >");
+            hideButton.setOnClickListener(v -> {
+                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_rl));
+                showAllViews(popup);
+                showButton.setVisibility(View.VISIBLE);
+                storyView.setVisibility(View.GONE);
+                hideButton.setVisibility(View.GONE);
+                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_rl));
+            });
+        }
 
         hideAllViews(popup);
         storyContainer.setVisibility(View.VISIBLE);
-        showButton.setVisibility(View.GONE);
         storyView.setVisibility(View.VISIBLE);
-        hideButton.setVisibility(View.VISIBLE);
+        showButton.setVisibility(View.GONE);
+        if (hasPrompt) {
+            hideButton.setVisibility(View.VISIBLE);
+        } else {
+            hideButton.setVisibility(View.GONE);
+        }
 
         return storyContainer;
     }
@@ -868,10 +882,10 @@ public class PlayFragment extends FullScreenFragment {
      * Creates a skip button
      * @return Skip button that goes the next puzzle
      */
-    public View createSkipButton(Puzzle puzzle) {
+    public View createSkipButton(Puzzle puzzle, String text) {
         LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
         Button button = buttonContainer.findViewById(R.id.mc_button);
-        button.setText("Skip this puzzle");
+        button.setText(text);
         button.setOnClickListener(v -> {
             puzzle.skip();
             if (puzzle.getOrder() + 1 == puzzle.getEnclosingQuest().getnPuzzles()) {
