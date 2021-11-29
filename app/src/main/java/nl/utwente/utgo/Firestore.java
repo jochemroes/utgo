@@ -95,6 +95,7 @@ public final class Firestore {
 
     //puzzle fields in Firestore
     protected static final String PUZZLE_LOC = "Loc";
+    protected static final String PUZZLE_LOC_ARR = "locArr";
     @Deprecated
     protected static final String PUZZLE_3D_OBJ_URL = "3dObjUrl";
     @Deprecated
@@ -828,6 +829,7 @@ public final class Firestore {
                                 for (int i=0;i<6;i=i+2) {
                                     augTemp.add(new Pair<String, String>(raw.get(i), raw.get(i+1)));
                                 }*/
+                                List<LatLng> locArr = (List<LatLng>) pDoc.get(PUZZLE_LOC_ARR);
                                 //get the augmented image map
                                 Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_URL_MAP);
 
@@ -856,6 +858,7 @@ public final class Firestore {
 
                                 tempPuzzle.setType(t)
                                         .setLocation(pLocg)
+                                        .setLocationArray(locArr)
                                         .setCorrectAnswer(pDoc.getString(PUZZLE_ANSWER))
                                         .setPrompt(pDoc.getString(PUZZLE_PROMPT))
                                         .setPrompts((List<String>) pDoc.get(PUZZLE_PROMPT_ARR))
@@ -921,8 +924,11 @@ public final class Firestore {
                                 for (int i=0;i<6;i=i+2) {
                                     augTemp.add(new Pair<String, String>(raw.get(i), raw.get(i+1)));
                                 }*/
+                                List<LatLng> locArr = (List<LatLng>) pDoc.get(PUZZLE_LOC_ARR);
+
                                 //get the augmented image map
                                 Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_URL_MAP);
+
                                 //get the 3d objects
                                 Map<Integer, List<AR3DObject>> ar3DObjects = new HashMap<>();
                                 Map<Integer, List<String>> objectUrls =
@@ -948,6 +954,7 @@ public final class Firestore {
 
                                 tempPuzzle.setType(t)
                                         .setLocation(pLocg)
+                                        .setLocationArray(locArr)
                                         .setCorrectAnswer(pDoc.getString(PUZZLE_ANSWER))
                                         .setPrompt(pDoc.getString(PUZZLE_PROMPT))
                                         .setPrompts((List<String>) pDoc.get(PUZZLE_PROMPT_ARR))

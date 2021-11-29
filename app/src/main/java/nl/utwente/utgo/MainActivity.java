@@ -389,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
         // load data
         Firestore.setFragments(this);
         Firestore.getAllData();
-        //addPuzzle();
+        //addStudyAssociations();
     }
 
     @Override
@@ -453,8 +453,8 @@ public class MainActivity extends AppCompatActivity {
         emptyBooleanArray.add(false);
 
         Firestore.createPuzzle("yup6hfpVVeTrtXYyTFN6", 52.24415, 6.852336,
-                "4", hintList, 0, 0, emptyStringArray, emptyStringArray,
+                "4", hintList, 1, 0, emptyStringArray, emptyStringArray,
                 emptyIntegerArray, emptyBooleanArray, emptyStringArray,
-                "");
+                "Now, let's see if you paid attention today!");
     }
 }

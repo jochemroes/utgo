@@ -22,7 +22,7 @@ import nl.utwente.utgo.Firestore;
  */
 public class Puzzle {
     private Quest enclosingQuest;
-    private LatLng location;
+    private List<LatLng> locArr;
     private String correctAnswer;
     private boolean correctlyAnswered;
     private List<String> prompts;
@@ -35,6 +35,8 @@ public class Puzzle {
     private boolean canSkip = false;
     public static final String TAG = "PuzzleClass";
 
+    @Deprecated
+    private LatLng location;
     @Deprecated
     private List<Pair<String, String>> augImgUrls;
     @Deprecated
@@ -64,8 +66,14 @@ public class Puzzle {
     public Quest getEnclosingQuest() { return enclosingQuest; }
 
     /**
+     * @return - the location array of the puzzle
+     */
+    public List<LatLng> getLocationArray() { return locArr; }
+
+    /**
      * @return - the location of the puzzle
      */
+    @Deprecated
     public LatLng getLocation() { return location; }
 
     /**
@@ -292,10 +300,21 @@ public class Puzzle {
     }
 
     /**
-     * Sets the location that the Puzzle should be in
+     * Sets the locationMap for the puzzle
+     * @param loc - locationMap of puzzle
+     * @return - itself after setting the location
+     */
+    public Puzzle setLocationArray(List<LatLng> loc) {
+        locArr = loc;
+        return this;
+    }
+
+    /**
+     * Sets the location for the puzzle
      * @param loc - location of puzzle
      * @return - itself after setting the location
      */
+    @Deprecated
     public Puzzle setLocation(LatLng loc) {
         location = loc;
         return this;
