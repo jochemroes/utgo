@@ -1,5 +1,12 @@
 package nl.utwente.utgo.arcorelocation.utils;
 
+import java.lang.reflect.Array;
+
+import com.google.maps.android.SphericalUtil;
+import com.google.maps.android.SphericalUtil.*;
+import com.google.android.gms.maps.model.LatLng;
+import java.util.ArrayList;
+
 /**
  * Created by John on 02/03/2018.
  */
@@ -55,6 +62,12 @@ public class LocationUtils {
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
         return Math.sqrt(distance);
+    }
+
+    public static LatLng newPoint(double lat1, double lon1, double degree) {
+        LatLng l = new LatLng(lat1, lon1);
+        l = SphericalUtil.computeOffset(l, 15, degree);
+        return l;
     }
 
 }

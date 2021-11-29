@@ -80,6 +80,7 @@ public class PlayFragment extends FullScreenFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final int ONLY_RENDER_WHEN_WITHIN = 30;
     private DeviceLocation deviceLocation;
 
     // TODO: Rename and change types of parameter
@@ -473,7 +474,7 @@ public class PlayFragment extends FullScreenFragment {
     private LocationMarker add3dModelMarker(double longitude, double latitude, String name,
                                             int height, boolean isQuest, String url, boolean rotate) {
         LocationMarker marker = new LocationMarker(longitude, latitude, get3DNode(url, rotate));
-        marker.setOnlyRenderWhenWithin(30);
+        marker.setOnlyRenderWhenWithin(ONLY_RENDER_WHEN_WITHIN);
         marker.setHeight(height);
         if (isQuest) {
             locationMarkers.add(marker);
@@ -551,6 +552,7 @@ public class PlayFragment extends FullScreenFragment {
                             "", threeD.getHeight(), true, threeD.getUrl(), threeD.isTurning());
                 }
                 setLocationBased();
+                locationScene.forceUpdate();
                 break;
             case AUGMENTED_IMAGE: // TODO teamPosition
                 Log.i(TAG, "setting augmented image quest with teamPosition: " + teamPosition);
@@ -571,6 +573,7 @@ public class PlayFragment extends FullScreenFragment {
         session.configure(config);
         arFragment.getPlaneDiscoveryController().show();
         arFragment.getPlaneDiscoveryController().setInstructionView(new HandMotionView(context));
+
     }
 
     private void setAugmentedImage() {
@@ -949,6 +952,7 @@ public class PlayFragment extends FullScreenFragment {
                 renderable.setShadowReceiver(false);
                 node.setRenderable(renderable);
                 node.setLocalRotation(Quaternion.axisAngle(new Vector3(1, 0, 0), -90));
+                locationScene.forceUpdate();
             });
 
                 //augmentedImageDatabase.addImage(bitmap.get(i).second, bitmap.get(i).first);

@@ -22,13 +22,15 @@ import nl.utwente.utgo.arcorelocation.sensor.DeviceLocationChanged;
 import nl.utwente.utgo.arcorelocation.sensor.DeviceOrientation;
 import nl.utwente.utgo.arcorelocation.utils.LocationUtils;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by John on 02/03/2018.
  */
 
 public class LocationScene {
 
-    private float RENDER_DISTANCE = 40f;
+    private final float RENDER_DISTANCE = 40f; //TASTER EDIT was 40f
     public ArSceneView mArSceneView;
     public DeviceLocation deviceLocation;
     public DeviceOrientation deviceOrientation;
@@ -39,7 +41,7 @@ public class LocationScene {
     private int anchorRefreshInterval = 1000 * 10; // 5 seconds
     // Limit of where to draw markers within AR scene.
     // They will auto scale, but this helps prevents rendering issues
-    private int distanceLimit = 40;
+    private int distanceLimit = 30; //TASTER was 30
     private boolean offsetOverlapping = false;
     private boolean removeOverlapping = false;
     // Bearing adjustment. Can be set to calibrate with true north
@@ -62,7 +64,7 @@ public class LocationScene {
     //Start JAAP
     private Location oldLocation;
     private boolean forceUpdate = false;
-    private final static int ACCURACY = 5;
+    private final static int ACCURACY = 10; // TASTER EDIT WAS 5 before
     //End JAAP
 
     public LocationScene(Activity context, ArSceneView mArSceneView) {
@@ -243,7 +245,7 @@ public class LocationScene {
         //Start JAAP
         if (!forceUpdate && oldLocation != null && !this.locationChangedEnoughToUpdate(oldLocation, deviceLocation.currentBestLocation)) {
             Log.i(TAG, "JAAP location didn't change enough");
-            return;
+            //return; tmp
         }
         forceUpdate = false;
         oldLocation = deviceLocation.currentBestLocation;
@@ -251,35 +253,52 @@ public class LocationScene {
         for (int i = 0; i < mLocationMarkers.size(); i++) {
             try {
                 final LocationMarker marker = mLocationMarkers.get(i);
+                //TASTER
+                double lat1 = deviceLocation.currentBestLocation.getLatitude();
+                double lat2 = marker.latitude;
+                double long1 = deviceLocation.currentBestLocation.getLongitude();
+                double long2 = marker.longitude;
+
+                double markerLat = marker.latitude;
+                double markerLon = marker.longitude;
+                
+                //END TASTER
                 int markerDistance = (int) Math.round(
                         LocationUtils.distance(
-                                marker.latitude,
+                                markerLat,
                                 deviceLocation.currentBestLocation.getLatitude(),
-                                marker.longitude,
+                                markerLon,
                                 deviceLocation.currentBestLocation.getLongitude(),
                                 0,
                                 0)
                 );
 
+//                if (markerDistance > marker.getOnlyRenderWhenWithin()) { TASTER
+//
+//                    // Don't render if this has been set and we are too far away.
+//                    Log.i(TAG, "Not rendering. Marker distance: " + markerDistance
+//                            + " Max render distance: " + marker.getOnlyRenderWhenWithin());
+//                    /* Jaap */ //despawn marker if it is to far away
+//                    if (marker.anchorNode != null && marker.anchorNode.getAnchor() != null) {
+//                        marker.anchorNode.getAnchor().detach();
+//                        marker.anchorNode.setAnchor(null);
+//                        marker.anchorNode.setEnabled(false);
+//                        marker.anchorNode = null;
+//                    }
+//                    continue;
+//                } TASTER
                 if (markerDistance > marker.getOnlyRenderWhenWithin()) {
-                    // Don't render if this has been set and we are too far away.
-                    Log.i(TAG, "Not rendering. Marker distance: " + markerDistance
-                            + " Max render distance: " + marker.getOnlyRenderWhenWithin());
-                    /* Jaap */ //despawn marker if it is to far away
-                    if (marker.anchorNode != null && marker.anchorNode.getAnchor() != null) {
-                        marker.anchorNode.getAnchor().detach();
-                        marker.anchorNode.setAnchor(null);
-                        marker.anchorNode.setEnabled(false);
-                        marker.anchorNode = null;
-                    }
-                    continue;
+                    double bearing1 = LocationUtils.bearing(lat1,long1,lat2,long2);
+                    LatLng l = LocationUtils.newPoint(lat1, long1, bearing1);
+                    markerLat = l.latitude;
+                    markerLon = l.longitude;
                 }
 
                 float bearing = (float) LocationUtils.bearing(
                         deviceLocation.currentBestLocation.getLatitude(),
                         deviceLocation.currentBestLocation.getLongitude(),
-                        marker.latitude,
-                        marker.longitude);
+                        markerLat,
+                        markerLon);
 
                 float markerBearing = bearing - deviceOrientation.getOrientation();
 
@@ -315,8 +334,8 @@ public class LocationScene {
                 // Raise distant markers for better illusion of distance
                 // Hacky - but it works as a temporary measure  
                 int cappedRealDistance = markerDistance > 500 ? 500 : markerDistance;
-                if (renderDistance != markerDistance)
-                    heightAdjustment += 0.005F * (cappedRealDistance - renderDistance);
+//                if (renderDistance != markerDistance) \\ TASTER EDIT
+//                    heightAdjustment += 0.005F * (cappedRealDistance - renderDistance); TASTER EDIT
 
                 float z = -Math.min(renderDistance, RENDER_DISTANCE);
 

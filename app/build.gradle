@@ -54,6 +54,7 @@ dependencies {
     api project(":sceneformux")
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'com.google.maps.android:android-maps-utils:0.6.2'
 
     /*-- ACRA   --*/
     def acraVersion = '5.7.0'
