@@ -4,17 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -22,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -389,7 +382,6 @@ public class MainActivity extends AppCompatActivity {
         // load data
         Firestore.setFragments(this);
         Firestore.getAllData();
-        //addStudyAssociations();
     }
 
     @Override
@@ -452,9 +444,12 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Boolean> emptyBooleanArray = new ArrayList<>();
         emptyBooleanArray.add(false);
 
-        Firestore.createPuzzle("yup6hfpVVeTrtXYyTFN6", 52.24415, 6.852336,
-                "4", hintList, 1, 0, emptyStringArray, emptyStringArray,
-                emptyIntegerArray, emptyBooleanArray, emptyStringArray,
-                "Now, let's see if you paid attention today!");
+        ArrayList<String> nullStringArray = new ArrayList<>();
+        nullStringArray.add(null);
+
+        Firestore.createPuzzle("EA1HoSkpooUsuwrjrFxX", 52.22863099797267, 6.899878276942844,
+                null, hintList, 0, 0, emptyStringArray, emptyStringArray,
+                emptyIntegerArray, emptyBooleanArray, nullStringArray,
+                "");
     }
 }

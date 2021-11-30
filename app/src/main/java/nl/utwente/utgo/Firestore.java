@@ -94,6 +94,7 @@ public final class Firestore {
     protected static final String QUEST_MIN_PLAYERS = "minPlayers";
 
     //puzzle fields in Firestore
+    @Deprecated
     protected static final String PUZZLE_LOC = "Loc";
     protected static final String PUZZLE_LOC_ARR = "locArr";
     @Deprecated
@@ -210,8 +211,11 @@ public final class Firestore {
         canTurn.add(false);
         canTurn.add(false);
 
+        ArrayList<GeoPoint> locArr = new ArrayList<>();
+        locArr.add(new GeoPoint(lat, lon));
         // filling puzzleMap
         puzzleMap.put(PUZZLE_LOC, new GeoPoint(lat, lon));
+        puzzleMap.put(PUZZLE_LOC_ARR, locArr);
         puzzleMap.put(PUZZLE_3D_OBJ_URL, emptyStringArray);
         puzzleMap.put(PUZZLE_AUG_IMG_URL, emptyStringArray);
         puzzleMap.put(PUZZLE_ANSWER, answer);
