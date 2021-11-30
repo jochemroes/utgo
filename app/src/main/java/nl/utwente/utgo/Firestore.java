@@ -846,7 +846,7 @@ public final class Firestore {
                                     List<String> playerObjectUrl = objectUrls.get(i);
                                     for (int j = 0; j < playerObjectUrl.size(); j++) {
                                         LatLng location;
-                                        if (locArr == null) {
+                                        if (locArr == null || locArr.get(0) == null) {
                                             location = pLocg;
                                         } else {
                                             location = new LatLng(locArr.get(j).getLatitude(), locArr.get(j).getLongitude());
