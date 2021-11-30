@@ -1378,29 +1378,29 @@ public final class Firestore {
         if (puzzle == null) {
             Log.i(TAG, "Puzzle is null");
         } else {
-            if (!team.getUid().isEmpty()) {
-                if(quest.getMinimumPlayers() == 1) {
+            // if a singleplayer quest
+            if(quest.getMinimumPlayers() == 1) {
+                ArrayList<String> teamMembers = new ArrayList<>();
+                teamMembers.add(userID);
+                checkNearbyQuest(quest, teamMembers, puzzle);
+                // if user has team
+            } else if (!team.getUid().isEmpty()) {
+                teamCol.document(team.getUid()).collection("member").get().addOnCompleteListener(task -> {
                     ArrayList<String> teamMembers = new ArrayList<>();
-                    teamMembers.add(userID);
-                    checkNearbyQuest(quest, teamMembers, puzzle);
-                } else {
-                    teamCol.document(team.getUid()).collection("member").get().addOnCompleteListener(task -> {
-                        ArrayList<String> teamMembers = new ArrayList<>();
-                        for (DocumentSnapshot docSnap : task.getResult().getDocuments()) {
-                            // add team member ids to list
-                            teamMembers.add(docSnap.getId());
-                        }
-                        int memberCount = teamMembers.size();
-                        // check if enough team members
-                        if (memberCount < quest.getMinimumPlayers()) {
-                            mainActivity.toast(quest.getMinimumPlayers() + " team members required!");
-                        } else {
-                            checkNearbyQuest(quest, teamMembers, puzzle);
-                        }
-                    });
-                }
+                    for (DocumentSnapshot docSnap : task.getResult().getDocuments()) {
+                        // add team member ids to list
+                        teamMembers.add(docSnap.getId());
+                    }
+                    int memberCount = teamMembers.size();
+                    // check if enough team members
+                    if (memberCount < quest.getMinimumPlayers()) {
+                        mainActivity.toast(quest.getMinimumPlayers() + " team members required!");
+                    } else {
+                        checkNearbyQuest(quest, teamMembers, puzzle);
+                    }
+                });
+                // no team and not singleplayer quest, team required
             } else {
-                // user has not team
                 // TODO: open profile or settings fragment
                 mainActivity.toast("Go to settings to join a team!");
             }
