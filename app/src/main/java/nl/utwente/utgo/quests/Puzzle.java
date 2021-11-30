@@ -4,6 +4,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import nl.utwente.utgo.Firestore;
  */
 public class Puzzle {
     private Quest enclosingQuest;
-    private List<LatLng> locArr;
+    private List<GeoPoint> locArr;
     private String correctAnswer;
     private boolean correctlyAnswered;
     private List<String> prompts;
@@ -68,7 +69,7 @@ public class Puzzle {
     /**
      * @return - the location array of the puzzle
      */
-    public List<LatLng> getLocationArray() { return locArr; }
+    public List<GeoPoint> getLocationArray() { return locArr; }
 
     /**
      * @return - the location of the puzzle
@@ -304,7 +305,7 @@ public class Puzzle {
      * @param loc - locationMap of puzzle
      * @return - itself after setting the location
      */
-    public Puzzle setLocationArray(List<LatLng> loc) {
+    public Puzzle setLocationArray(List<GeoPoint> loc) {
         locArr = loc;
         return this;
     }

@@ -829,7 +829,7 @@ public final class Firestore {
                                 for (int i=0;i<6;i=i+2) {
                                     augTemp.add(new Pair<String, String>(raw.get(i), raw.get(i+1)));
                                 }*/
-                                List<LatLng> locArr = (List<LatLng>) pDoc.get(PUZZLE_LOC_ARR);
+                                List<GeoPoint> locArr = (List<GeoPoint>) pDoc.get(PUZZLE_LOC_ARR);
                                 //get the augmented image map
                                 Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_URL_MAP);
 
@@ -845,8 +845,14 @@ public final class Firestore {
                                     List<AR3DObject> temparobjlist = new ArrayList<>();
                                     List<String> playerObjectUrl = objectUrls.get(i);
                                     for (int j = 0; j < playerObjectUrl.size(); j++) {
+                                        LatLng location;
+                                        if (locArr == null) {
+                                            location = pLocg;
+                                        } else {
+                                            location = new LatLng(locArr.get(j).getLatitude(), locArr.get(j).getLongitude());
+                                        }
                                         AR3DObject temparobj = new AR3DObject(
-                                                pLocg,
+                                                location,
                                                 playerObjectUrl.get(j),
                                                 objectHeights.get(i).get(j).intValue(),
                                                 objectCanTurns.get(i).get(j)
@@ -913,7 +919,10 @@ public final class Firestore {
                             for (DocumentSnapshot pDoc : pTask.getResult().getDocuments()) {
                                 GeoPoint pLoc = pDoc.getGeoPoint(PUZZLE_LOC);
                                 Puzzle tempPuzzle = new Puzzle(temp);
-                                LatLng pLocg = new LatLng(pLoc.getLatitude(), pLoc.getLongitude());
+                                LatLng pLocg =null;
+                                if (pLoc != null) {
+                                     pLocg = new LatLng(pLoc.getLatitude(), pLoc.getLongitude());
+                                }
                                 //get the puzzle type
                                 Long intType = pDoc.getLong(PUZZLE_TYPE);
                                 PUZZLETYPE t = typeMap.get(intType);
@@ -924,7 +933,7 @@ public final class Firestore {
                                 for (int i=0;i<6;i=i+2) {
                                     augTemp.add(new Pair<String, String>(raw.get(i), raw.get(i+1)));
                                 }*/
-                                List<LatLng> locArr = (List<LatLng>) pDoc.get(PUZZLE_LOC_ARR);
+                                List<GeoPoint> locArr = (List<GeoPoint>) pDoc.get(PUZZLE_LOC_ARR);
 
                                 //get the augmented image map
                                 Map<String, List<String>> rawAugMap = (Map<String, List<String>>) pDoc.get(PUZZLE_AUG_IMG_URL_MAP);
@@ -941,8 +950,13 @@ public final class Firestore {
                                     List<AR3DObject> temparobjlist = new ArrayList<>();
                                     List<String> playerObjectUrl = objectUrls.get(i);
                                     for (int j = 0; j < playerObjectUrl.size(); j++) {
+                                        LatLng location;
+                                        if (locArr == null || locArr.get(0) == null) { //kut code
+                                            location = pLocg;
+                                        } else {
+                                            location = new LatLng(locArr.get(j).getLatitude(), locArr.get(j).getLongitude());                                        }
                                         AR3DObject temparobj = new AR3DObject(
-                                                pLocg,
+                                                location,
                                                 playerObjectUrl.get(j),
                                                 objectHeights.get(i).get(j).intValue(),
                                                 objectCanTurns.get(i).get(j)
