@@ -1416,32 +1416,36 @@ public final class Firestore {
      * @param puzzle The current puzzle
      */
     private static void checkNearbyQuest(Quest quest, ArrayList<String> teamMembers, Puzzle puzzle) {
-        // check if user is nearby quest
-        DeviceLocation deviceLocation = mainActivity.getPlayFragment().getDeviceLocation();
-        if (deviceLocation == null) {
-            mainActivity.toast("Still loading");
-        } else if (deviceLocation.currentBestLocation == null) {
-            mainActivity.toast("GPS location unknown");
+        Puzzle puzzle = quest.getPuzzle(0);
+        if (puzzle == null) {
+            Log.i(TAG, "Puzzle is null");
         } else {
-            LatLng lat = quest.getLocation(); //TODO All this stuff can be in a helper function
-            Location newLoc = new Location("");
-            newLoc.setLatitude(lat.latitude);
-            newLoc.setLongitude(lat.longitude);
-            //deviceLocation.startUpdatingLocation();
-            float distance = deviceLocation.currentBestLocation.distanceTo(newLoc);
-            if (distance > 60) {
-                Log.i("JAAP", "distance between quest and me = " + distance);
-                mainActivity.toast("Get closer to the quest!");
-                return;
+            // if a singleplayer quest
+            if(quest.getMinimumPlayers() == 1) {
+                ArrayList<String> teamMembers = new ArrayList<>();
+                teamMembers.add(userID);
+                checkNearbyQuest(quest, teamMembers, puzzle);
+                // if user has team
+            } else if (!team.getUid().isEmpty()) {
+                teamCol.document(team.getUid()).collection("member").get().addOnCompleteListener(task -> {
+                    ArrayList<String> teamMembers = new ArrayList<>();
+                    for (DocumentSnapshot docSnap : task.getResult().getDocuments()) {
+                        // add team member ids to list
+                        teamMembers.add(docSnap.getId());
+                    }
+                    int memberCount = teamMembers.size();
+                    // check if enough team members
+                    if (memberCount < quest.getMinimumPlayers()) {
+                        mainActivity.toast(quest.getMinimumPlayers() + " team members required!");
+                    } else {
+                        checkNearbyQuest(quest, teamMembers, puzzle);
+                    }
+                });
+                // no team and not singleplayer quest, team required
+            } else {
+                // TODO: open profile or settings fragment?
+                mainActivity.toast("Go to settings to join a team!");
             }
-
-            // sort team members list
-            Collections.sort(teamMembers);
-            // get index of user which is the quest role
-            questRole = teamMembers.indexOf(userID);
-            mainActivity.setSelectedQuest(quest);
-            //init first puzzle
-            mainActivity.getPlayFragment().setPuzzle(puzzle);
         }
     }
 
