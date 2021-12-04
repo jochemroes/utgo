@@ -1401,7 +1401,7 @@ public final class Firestore {
                 });
                 // no team and not singleplayer quest, team required
             } else {
-                // TODO: open profile or settings fragment
+                // TODO: open profile or settings fragment?
                 mainActivity.toast("Go to settings to join a team!");
             }
         }
