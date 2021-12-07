@@ -50,8 +50,9 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
     private static final String TAG = "MAP";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final int STD_ZOOM = 15;
-    private static final LatLng UT_LOC = new LatLng(52.241748, 6.853155);
+    public static final int STD_ZOOM = 15;//15;
+    public static final int STD_MARKER_ONCLICK_ZOOM = 17;
+    private static final LatLng UT_LOC = new LatLng(52.240907, 6.853895);//new LatLng(52.241748, 6.853155);
     private static final String MAP_PREF = "map_pref";
     private static final String LAST_LAT = "last_latitude";
     private static final String LAST_LON = "last_longitude";
@@ -274,7 +275,7 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), STD_ZOOM), 500, null);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), STD_MARKER_ONCLICK_ZOOM), 500, null);
         return true;
     }
 
@@ -286,7 +287,7 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
         for (Marker marker : questMarkers) {
             if (marker.getTag() == quest) {
                 marker.showInfoWindow();
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), STD_ZOOM));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), STD_MARKER_ONCLICK_ZOOM));
                 break;
             }
         }
