@@ -545,6 +545,7 @@ public class PlayFragment extends FullScreenFragment {
         displaySubmit(puzzle);
         switch (puzzle.getType()) {
             case LOCATION_BASED:
+                arFragment.getArSceneView().getScene().getCamera().setFarClipPlane(40);//TASTERDAYSETTING
                 Log.i(TAG, "setting Location based quest with teamPosition: " + teamPosition);
                 List<AR3DObject> listThreeD = puzzle.getAr3DObjectsMap().get(teamPosition);
                 for (AR3DObject threeD : listThreeD) {
@@ -555,6 +556,7 @@ public class PlayFragment extends FullScreenFragment {
                 locationScene.forceUpdate();
                 break;
             case AUGMENTED_IMAGE: // TODO teamPosition
+                arFragment.getArSceneView().getScene().getCamera().setFarClipPlane(30);//TASTERDAYSETTING
                 Log.i(TAG, "setting augmented image quest with teamPosition: " + teamPosition);
                 Map<Integer, List<Pair<String, String>>> list = puzzle.getAugmentedImageUrlMap();
                 List<Pair<String, String>> list2 = list.get(teamPosition);
@@ -562,6 +564,7 @@ public class PlayFragment extends FullScreenFragment {
                 augmentedImage.setupAugmentedImage((ArrayList<Pair<String, String>>) list2);
                 break;
             case REGULAR:
+                arFragment.getArSceneView().getScene().getCamera().setFarClipPlane(30);//TASTERDAYSETTING
                 setRegular();
                 Log.i(TAG, "regular quest nothing has to be done in AR");
                 break;
