@@ -394,12 +394,13 @@ public class MainActivity extends AppCompatActivity {
             String uid = data.getStringExtra("uid");
             String photo = data.getStringExtra("photo");
 
-            Log.d(TAG, "Hello " + name + " with email " + email + ". Unique identifier is " + uid + " and photo URL " + photo);
-
-            // TODO: Do something with Google account data
+            //Log.d(TAG, "Hello " + name + " with email " + email + ". Unique identifier is " + uid + " and photo URL " + photo);
         }
     }
 
+    /**
+     * IGNORE BELOW
+     */
 
     private void addStudyAssociations() {
         String[] list = new String[]{
@@ -415,18 +416,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Dear loyal student,
-     * Eerst een quest maken.
-     * Daarna pas puzzles toevoegen.
-     * Kind regards,
-     * Ruben
-     */
     private void addQuest() {
-        Firestore.createXpQuest(52.239053, 6.855883,
-                "#1D428A", "Inter-Actief is the study association for the studies Technical Computer Science, Business\n" +
-                        "Information Technology and the corresponding masters at the University of Twente.",
-                1, 1, "Inter-Actief", 0, 25);
+        Firestore.createXpQuest(52.238744, 6.856059,
+                "#FFB247", "Once you have finished all the quests, meet with the others!",
+                1, 1, "Meeting Point", 0, 1);
     }
 
     private void addPuzzle() {
@@ -447,9 +440,9 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> nullStringArray = new ArrayList<>();
         nullStringArray.add(null);
 
-        Firestore.createPuzzle("EA1HoSkpooUsuwrjrFxX", 52.22863099797267, 6.899878276942844,
-                null, hintList, 0, 0, emptyStringArray, emptyStringArray,
+        Firestore.createPuzzle("iH0ux5VSqYsOlgFW9q1a", 2.238744, 6.856059,
+                null, hintList, 0, 2, emptyStringArray, emptyStringArray,
                 emptyIntegerArray, emptyBooleanArray, nullStringArray,
-                "");
+                "We hope you had a nice day!");
     }
 }
