@@ -3,6 +3,7 @@ package nl.utwente.utgo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import nl.utwente.utgo.arcorelocation.utils.ARLocationPermissionHelper;
+import nl.utwente.utgo.content.PagerAdapter;
+import nl.utwente.utgo.content.PopupContent;
 import nl.utwente.utgo.quests.Quest;
 
 
@@ -30,9 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Main Activity";
     private static final int RC_LOGIN_ACT = 1;
+    private PopupContent popup = new PopupContent();
     private QuestsFragment quests = QuestsFragment.newInstance("", "");
-    private MapFragment map = MapFragment.newInstance("", "");
-    private PlayFragment play = PlayFragment.newInstance("", "");
+    private MapFragment map = MapFragment.newInstance(popup);
+    private PlayFragment play = PlayFragment.newInstance(popup);
     private LeaderboardsFragment leaderboards = LeaderboardsFragment.newInstance("", "");
     private ProfileFragment profile = ProfileFragment.newInstance("", "");
     private SettingsFragment settings = SettingsFragment.newInstance("", "");
@@ -49,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     Animation fadeIn;
     Animation fadeOut;
+
+    private View popupParent;
 
     /**
      * Listener for the bottom navigation that opens a page when it is selected
@@ -270,6 +277,9 @@ public class MainActivity extends AppCompatActivity {
         if (selected.equals(settings)) {
             rightIconSrc = R.drawable.ic_baseline_close_24;
         }
+        if (selected.equals(play) && !popup.foundGPS()) {
+            popup.show(play);
+        }
         changeTitleBar(-1, selected.getTag(), rightIconSrc, settingsClickedListener);
 
         int[] anim;
@@ -379,9 +389,44 @@ public class MainActivity extends AppCompatActivity {
         rightIcon = findViewById(R.id.right_icon);
         rightIcon.setVisibility(View.INVISIBLE);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.popup_frag_cont, popup, "Popup")
+                .commit();
+        popupParent = findViewById(R.id.main_popup);
+        View popupClose = findViewById(R.id.PopupTitle);
+        popupClose.setOnClickListener(v -> hidePopup());
+
         // load data
         Firestore.setFragments(this);
         Firestore.getAllData();
+    }
+
+    public void displayPopup() {
+        if (popupParent.getVisibility() == View.INVISIBLE) {
+            getPlayFragment().hidePopupButton();
+            popupParent.setVisibility(View.VISIBLE);
+            popupParent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.popup));
+        }
+    }
+
+    /**
+     * Displays a popup with a slide up animation.
+     * Called after views of popup are created.
+     *
+     * @param title Title of the popup
+     */
+    public void displayPopup(String title) {
+        TextView titleView = popupParent.findViewById(R.id.popup_title);
+        titleView.setText(title);
+        displayPopup();
+    }
+
+    public void hidePopup() {
+        if (popupParent.getVisibility() == View.VISIBLE) {
+            getPlayFragment().showPopupButton();
+            popupParent.startAnimation(AnimationUtils.loadAnimation(this, R.anim.popdown));
+            popupParent.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

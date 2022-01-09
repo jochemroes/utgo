@@ -160,7 +160,7 @@ public final class Firestore {
 
 
     //profile
-    protected static Player player;
+    public static Player player;
     protected static Team team;
     protected static Dogroup dogroup;
     protected static StudyAssociation study;

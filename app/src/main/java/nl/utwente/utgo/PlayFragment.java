@@ -16,21 +16,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
 import com.google.ar.core.Session;
@@ -61,11 +54,10 @@ import nl.utwente.utgo.arcorelocation.LocationScene;
 import nl.utwente.utgo.arcorelocation.NFSArFragment;
 import nl.utwente.utgo.arcorelocation.sensor.DeviceLocation;
 import nl.utwente.utgo.arcorelocation.utils.ARLocationPermissionHelper;
+import nl.utwente.utgo.content.PopupContent;
 import nl.utwente.utgo.quests.AR3DObject;
 import nl.utwente.utgo.quests.Puzzle;
 import nl.utwente.utgo.quests.Puzzle.PUZZLETYPE;
-import nl.utwente.utgo.quests.Quest;
-import nl.utwente.utgo.quests.XpQuest;
 
 import static nl.utwente.utgo.R.layout.test_label;
 
@@ -98,33 +90,28 @@ public class PlayFragment extends FullScreenFragment {
     private PlayAugmentedImage augmentedImage;
     private ArrayList<LocationMarker> locationMarkers = new ArrayList<>();
 
-    private ViewGroup container;
-    private View popupParent;
-    private View popupButton;
-    private LinearLayout popup;
+    private PopupContent popup;
     private boolean GPSPopup = false;
     private Node rotate;
     private Puzzle currentPuzzle;
     private Session session;
+    private View popupButton;
 
-    public PlayFragment() {
-        // Required empty public constructor
+    public PlayFragment(PopupContent popup) {
+        this.popup = popup;
     }
 
     /**
      * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1
-     * @param param2 Parameter 2
+     * this fragment using the provided parameters
      * @return A new instance of fragment Play
      */
     // TODO: Rename and change types and number of parameters
-    public static PlayFragment newInstance(String param1, String param2) {
-        PlayFragment fragment = new PlayFragment();
+    public static PlayFragment newInstance(PopupContent popup) {
+        PlayFragment fragment = new PlayFragment(popup);
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, "");
+        args.putString(ARG_PARAM2, "");
         fragment.setArguments(args);
         return fragment;
     }
@@ -157,18 +144,21 @@ public class PlayFragment extends FullScreenFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_play, container, false);
-        this.container = container;
         locationScene = null; //TODO save as much information without crashing later
         popupButton = view.findViewById(R.id.popup_button);
         popupButton.setOnClickListener(v -> {
-            displayPopup();
+            popup.show(this);
+            popupButton.setVisibility(View.GONE);
         });
-        popupParent = view.findViewById(R.id.play_popup);
-        View popupClose = view.findViewById(R.id.PopupTitle);
-        popupClose.setOnClickListener(v -> hidePopup());
-        popup = view.findViewById(R.id.inner_play_popup);
-        displayGPSMessage();
         return view;
+    }
+
+    public void showPopupButton() {
+        popupButton.setVisibility(View.VISIBLE);
+    }
+
+    public void hidePopupButton() {
+        popupButton.setVisibility(View.GONE);
     }
 
     /**
@@ -228,9 +218,9 @@ public class PlayFragment extends FullScreenFragment {
                         Location current_location = locationScene.deviceLocation.currentBestLocation;
                         LocationManager temp = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
                         if (current_location != null && temp.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            hideGPSPopup();
+                            popup.GPSFound(this);
                         } else {
-                            displayGPSMessage();
+                            popup.GPSMessage(this);
                             return;
                         }
                         if (locationMarkers.size() > 0) {
@@ -448,7 +438,7 @@ public class PlayFragment extends FullScreenFragment {
      *
      * @return always true when done
      */
-    private boolean removeQuestLocationMarkers() {
+    public boolean removeQuestLocationMarkers() {
 
         for (LocationMarker lm : locationMarkers) {
             if (lm.anchorNode != null) {
@@ -542,7 +532,8 @@ public class PlayFragment extends FullScreenFragment {
         //String title = puzzle.getEnclosingQuest().getTitle() + " (" +
         //        (puzzle.getOrder() +1) + "/" + puzzle.getEnclosingQuest().getnPuzzles() + ")";
         //displaySubmit(title, puzzle.getPrompt(teamPosition), puzzle);
-        displaySubmit(puzzle);
+        popup.submit(puzzle, this);
+        popup.show(this);
         switch (puzzle.getType()) {
             case LOCATION_BASED:
                 arFragment.getArSceneView().getScene().getCamera().setFarClipPlane(40);//TASTERDAYSETTING
@@ -605,312 +596,6 @@ public class PlayFragment extends FullScreenFragment {
         }
     }
 
-    /**
-     * Displays a popup with a slide up animation.
-     * Called after views of popup are created.
-     *
-     * @param title Title of the popup
-     */
-    public void displayPopup(String title) {
-        TextView titleView = popupParent.findViewById(R.id.popup_title);
-        titleView.setText(title);
-        displayPopup();
-    }
-
-    public void displayPopup() {
-        if (popupParent.getVisibility() == View.INVISIBLE) {
-            popupParent.setVisibility(View.VISIBLE);
-            popupParent.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.popup));
-        }
-        GPSPopup = false;
-    }
-
-    /**
-     * Displays a message in the popup.
-     *
-     * @param title   Title of the popup
-     * @param message Message in the popup
-     */
-    public void displayMessage(String title, String message) {
-        popup.removeAllViews();
-        popup.addView(createTextView(message));
-        displayPopup(title);
-    }
-
-    private static final String GPS_TITLE = "GPS";
-    private static final String GPS_MESSAGE = "Looking for GPS signal...";
-    private static final String GPS_SIGNAL_MESSAGE = "GPS signal found! You can now start playing by selecting a quest.";
-
-    /**
-     * Popup that tells the user the application is looking for a GPS signal
-     */
-    public void displayGPSMessage() {
-        displayMessage(GPS_TITLE, GPS_MESSAGE);
-        GPSPopup = true;
-    }
-
-    /**
-     * Displays a question with input field.
-     *
-     * @param title       Title of the popup
-     * @param description Description of the question
-     * @param puzzle      Puzzle element that verifies the answer
-     */
-    @Deprecated
-    public void displaySubmit(String title, String description, Puzzle puzzle) {
-        popup.removeAllViews();
-        popup.addView(createTextView(description));
-        View hintButton = createHintButton(puzzle, 0);
-        if (hintButton != null) popup.addView(hintButton);
-        popup.addView(createInput(puzzle));
-        displayPopup(title);
-    }
-
-    /**
-     * Displays a prompt with input field
-     * @param puzzle Puzzle object that has the prompt and verifies the answer
-     */
-    public void displaySubmit(Puzzle puzzle) {
-        Quest quest = puzzle.getEnclosingQuest();
-        String title = quest.getTitle()
-                + " (" + (puzzle.getOrder() + 1) + "/" + quest.getnPuzzles() + ")";
-        int role = Firestore.getQuestRole();
-        boolean hasPrompt = puzzle.hasPrompt(role);
-        String story = "";
-        if (puzzle.getOrder() == 0) story += "Hey, " + Firestore.player.getName() + "!\n\n";
-        story += puzzle.getStory();
-
-        popup.removeAllViews();
-        popup.addView(createStoryButton(story, hasPrompt));
-        if (hasPrompt) {
-            String description = puzzle.getPrompt(role);
-            popup.addView(createTextView(description));
-            View hintButton = createHintButton(puzzle, 0);
-            if (hintButton != null) popup.addView(hintButton);
-            popup.addView(createInput(puzzle));
-            if (puzzle.isSkippable()) popup.addView(createSkipButton(puzzle, "Skip this question"));
-        }
-        hideAllViews(popup);
-        popup.getChildAt(0).setVisibility(View.VISIBLE);
-        if (!hasPrompt) {
-            popup.addView(createSkipButton(puzzle, "Next"));
-        }
-        displayPopup(title);
-    }
-
-    /**
-     * Shows all child views
-     * @param view parents view
-     */
-    public static void showAllViews(LinearLayout view) {
-        for (int i = 0; i < view.getChildCount(); i++) {
-            view.getChildAt(i).setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * Hides all child views
-     * @param view the parent view
-     */
-    public static void hideAllViews(LinearLayout view) {
-        for (int i = 0; i < view.getChildCount(); i++) {
-            view.getChildAt(i).setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Hides the popup with a slide down animation.
-     */
-    public void hidePopup() {
-        if (popupParent.getVisibility() == View.VISIBLE) {
-            popupParent.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.popdown));
-            popupParent.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    /**
-     * Hides the popup if it's the GPS popup.
-     */
-    public void hideGPSPopup() {
-        if (GPSPopup) {
-            hidePopup();
-            displayMessage(GPS_TITLE, GPS_SIGNAL_MESSAGE);
-            hidePopup();
-        }
-    }
-
-    /**
-     * Creates a text field.
-     *
-     * @param text value of the text field
-     * @return the text field
-     */
-    public TextView createTextView(String text) {
-        TextView textView = new TextView(getContext());
-        textView.setText(text);
-        textView.setTextColor(getResources().getColor(R.color.text_color));
-        textView.setGravity(Gravity.CENTER);
-        return textView;
-    }
-
-    /**
-     * Creates a button for every hint (2nd hint button only visible when 1st is opened)
-     * @param puzzle Puzzle object that contains the hints
-     * @param index Used for recursion
-     * @return View that contains the buttons and the hints
-     */
-    public View createHintButton(Puzzle puzzle, int index) {
-        List<String> hints = puzzle.getHints();
-        if (index < hints.size() && !hints.get(index).equals("")) {
-            TextView hintView = createTextView("Hint #" + (index + 1) + ": " + hints.get(index));
-            hintView.setVisibility(View.GONE);
-            LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
-            buttonContainer.addView(hintView);
-            Button button = buttonContainer.findViewById(R.id.mc_button);
-            button.setText("Get " + PrettyPrint.numberToOrdinal(index + 1) + " hint");
-            button.setOnClickListener(v -> {
-                button.setVisibility(View.GONE);
-                hintView.setVisibility(View.VISIBLE);
-                if (index + 1 < hints.size()) buttonContainer.addView(createHintButton(puzzle, index + 1));
-                // TODO possibly decrease score of puzzle
-            });
-            return buttonContainer;
-        }
-        return null;
-    }
-
-    /**
-     * Creates a button that opens the story of a puzzle when the prompt is opened
-     * and a button that opens the prompt of a puzzle when the story is opened
-     * @param story The story of a puzzle in String form
-     * @return the view that contains the buttons and the story text field
-     */
-    public View createStoryButton(String story, boolean hasPrompt) {
-        TextView storyView = createTextView(story);
-        LinearLayout storyContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
-        LinearLayout hideButtonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
-        storyContainer.addView(storyView);
-
-        Button showButton = storyContainer.findViewById(R.id.mc_button);
-        Button hideButton = hideButtonContainer.findViewById(R.id.mc_button);
-
-        if (hasPrompt) {
-            storyContainer.addView(hideButtonContainer);
-
-            showButton.setText("< story");
-            showButton.setOnClickListener(v -> {
-                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_lr));
-                hideAllViews(popup);
-                storyContainer.setVisibility(View.VISIBLE);
-                showButton.setVisibility(View.GONE);
-                storyView.setVisibility(View.VISIBLE);
-                hideButton.setVisibility(View.VISIBLE);
-                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_lr));
-            });
-
-            hideButton.setText("question >");
-            hideButton.setOnClickListener(v -> {
-                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_rl));
-                showAllViews(popup);
-                showButton.setVisibility(View.VISIBLE);
-                storyView.setVisibility(View.GONE);
-                hideButton.setVisibility(View.GONE);
-                popup.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_rl));
-            });
-        }
-
-        hideAllViews(popup);
-        storyContainer.setVisibility(View.VISIBLE);
-        storyView.setVisibility(View.VISIBLE);
-        showButton.setVisibility(View.GONE);
-        if (hasPrompt) {
-            hideButton.setVisibility(View.VISIBLE);
-        } else {
-            hideButton.setVisibility(View.GONE);
-        }
-
-        return storyContainer;
-    }
-
-    /**
-     * Creates an input field
-     * @return Input view that calls the submit function of a puzzle when filled in
-     */
-    public View createInput(Puzzle puzzle) {
-        LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.text_input, container, false);
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-        params.setMargins(0, 0, 0, 10);
-
-        TextView wrongAnswer = view.findViewById(R.id.wrong_answer);
-        TextInputLayout inputLayout = view.findViewById(R.id.InputLayout);
-        TextInputEditText editText = view.findViewById(R.id.EditText);
-
-        inputLayout.setPlaceholderText(" ");
-        inputLayout.setHint("Enter your answer here");
-        editText.setOnEditorActionListener((v, actionId, event) -> {
-            boolean handled = false;
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                String answer = v.getText().toString();
-                handled = puzzle.checkAnswer(answer);
-                if (puzzle.getOrder() + 1 == puzzle.getEnclosingQuest().getnPuzzles() && handled) {
-                    Quest enclosing = puzzle.getEnclosingQuest();
-                    if (enclosing instanceof XpQuest) {
-                        XpQuest xpQuest = (XpQuest) enclosing;
-                        int xp = xpQuest.getXp();
-                        displayMessage("Congratulations!", xp + " xp has been added to your account and groups!");
-                    } else {
-                        displayMessage("Congratulations!", "You have completed the quest!");
-                    }
-                }
-                if (handled) {
-                    removeQuestLocationMarkers();
-                    augmentedImage.removeNodesAugmented();
-                    augmentedImage.removeAugmentedDataBase();
-                } else {
-                    wrongAnswer.setVisibility(View.VISIBLE);
-                    editText.setText("");
-                    inputLayout.setPlaceholderText("something else than \"" + answer + "\"");
-                    inputLayout.setSelected(false);
-                }
-            }
-            return handled;
-        });
-
-        LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
-        Button button = buttonContainer.findViewById(R.id.mc_button);
-        button.setText("Submit answer");
-        button.setOnClickListener(v -> editText.onEditorAction(EditorInfo.IME_ACTION_SEND));
-        view.addView(buttonContainer);
-        return view;
-    }
-
-    /**
-     * Creates a skip button
-     * @return Skip button that goes the next puzzle
-     */
-    public View createSkipButton(Puzzle puzzle, String text) {
-        LinearLayout buttonContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.mc_button, container, false);
-        Button button = buttonContainer.findViewById(R.id.mc_button);
-        button.setText(text);
-        button.setOnClickListener(v -> {
-            puzzle.skip();
-            if (puzzle.getOrder() + 1 == puzzle.getEnclosingQuest().getnPuzzles()) {
-                Quest enclosing = puzzle.getEnclosingQuest();
-                if (enclosing instanceof XpQuest) {
-                    XpQuest xpQuest = (XpQuest) enclosing;
-                    int xp = xpQuest.getXp();
-                    displayMessage("Congratulations!", xp + " xp has been added to your account and groups!");
-                } else {
-                    displayMessage("Congratulations!", "You have completed the quest!");
-                }
-            }
-            removeQuestLocationMarkers();
-            augmentedImage.removeNodesAugmented();
-            augmentedImage.removeAugmentedDataBase();
-        });
-        return buttonContainer;
-    }
-
     public DeviceLocation getDeviceLocation() {
         return deviceLocation;
     }
@@ -960,6 +645,10 @@ public class PlayFragment extends FullScreenFragment {
 
                 //augmentedImageDatabase.addImage(bitmap.get(i).second, bitmap.get(i).first);
         }
+    }
+
+    public PlayAugmentedImage getAugmentedImage() {
+        return augmentedImage;
     }
 
 }
