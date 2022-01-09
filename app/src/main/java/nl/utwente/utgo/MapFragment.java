@@ -35,6 +35,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 import java.util.ArrayList;
 
+import nl.utwente.utgo.content.PopupContent;
 import nl.utwente.utgo.quests.Quest;
 
 /**
@@ -73,6 +74,7 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
     private CollectionReference rewardquestCol = db.collection("reward_quest");
     private OnCompleteListener<QuerySnapshot> questsToMarker;
     private List<Marker> questMarkers;
+    private PopupContent popup;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -81,7 +83,8 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
     /**
      * Constructor of MapFragment
      */
-    public MapFragment() {
+    public MapFragment(PopupContent popup) {
+        this.popup = popup;
         questMarkers = new ArrayList<>();
     }
 
@@ -89,16 +92,14 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment Map.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
-        MapFragment fragment = new MapFragment();
+    public static MapFragment newInstance(PopupContent popup) {
+        MapFragment fragment = new MapFragment(popup);
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, "");
+        args.putString(ARG_PARAM2, "");
         fragment.setArguments(args);
         return fragment;
     }
@@ -260,7 +261,7 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
             //only do this if remaining quest time > 0
             MarkerOptions opt = new MarkerOptions().position(q.getLocation()).title(q.getTitle());
             opt.icon(BitmapDescriptorFactory.defaultMarker(PrettyPrint.rgbToHue(q.getColor())));
-            opt.snippet(q.getDescription());
+            //opt.snippet(q.getDescription());
             Marker m = mMap.addMarker(opt);
             m.setTag(q);
             questMarkers.add(m);
@@ -276,6 +277,8 @@ public class MapFragment extends FullScreenFragment implements OnMapReadyCallbac
     public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), STD_MARKER_ONCLICK_ZOOM), 500, null);
+        popup.questInfo(((Quest) marker.getTag()), this);
+        popup.show(this);
         return true;
     }
 
