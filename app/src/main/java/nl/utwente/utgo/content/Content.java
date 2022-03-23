@@ -20,7 +20,7 @@ public abstract class Content extends Fragment {
 
     protected LayoutInflater inflater;
 
-    private SwipeRefreshLayout swipeLayout;
+    protected SwipeRefreshLayout swipeLayout;
     protected ScrollView scroll;
     protected LinearLayout contentFiller;
 
