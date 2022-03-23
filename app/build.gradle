@@ -11,8 +11,8 @@ android {
         applicationId "nl.utwente.utgo"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.3.0"
 
         //multidex
         //multiDexEnabled true
